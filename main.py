@@ -187,7 +187,7 @@ def main(page: ft.Page):
             unzipfile(path=zip_file_path.strip(), directory_to_extract=str(folder_path))
             output_text.value += "Files extracted successfully.\n\n"
 
-            # Renombrar archivos y carpetas
+            # Rename files and folders
             rename_status, rename_messages, total_matches = rename_files_and_folders(
                 folder_path, new_name.strip()
             )
@@ -208,7 +208,7 @@ def main(page: ft.Page):
                 f"\nRename status: {'Success' if rename_status else 'Failed'}\n"
             )
             output_text.value += (
-                f"Estado de compresión: {'Éxito' if compress_status else 'Failed'}\n"
+                f"Estado de compresión: {'Success' if compress_status else 'Failed'}\n"
             )
             output_text.value += "=" * 80
 
@@ -218,7 +218,7 @@ def main(page: ft.Page):
 
         page.update()
 
-    # Botón para procesar
+    # Button for start the process
     process_button = ft.ElevatedButton(
         text="Process",
         on_click=process_files,
@@ -228,7 +228,7 @@ def main(page: ft.Page):
         color=ft.Colors.WHITE,
     )
 
-    # Agregar elementos a la página
+    # Add items to the main page
     page.add(
         ft.Column(
             [
@@ -275,4 +275,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main)  # Execute the main function into the app
