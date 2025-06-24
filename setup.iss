@@ -4,7 +4,7 @@ AppVersion=1.0
 DefaultDirName={pf}\GenerateTemplate
 DefaultGroupName=GenerateTemplate
 OutputDir=C:\NetApplications\Apps
-OutputBaseFilename=InstaladorGenerateTemplate
+OutputBaseFilename=GenerateTemplateInstaller
 Compression=lzma
 SolidCompression=yes
 

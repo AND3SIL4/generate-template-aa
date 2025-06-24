@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-CURRENT_TEMPLATE_NAME = r"AD_GI_EstadisticasPrestacionesEconomicas"
+CURRENT_TEMPLATE_NAME = r"RPAES00_PlantillaAsistente"
 
 
 # Funciones unzipfile, rename_files_and_folders y compress_file sin cambios
