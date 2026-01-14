@@ -1,8 +1,10 @@
+# todo: use Soc to refactor the application
+
+import logging
 import os
+from pathlib import Path
 import re
 import zipfile
-from pathlib import Path
-import logging
 
 # Configure logging
 logging.basicConfig(
