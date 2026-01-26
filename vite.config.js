@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 const host = process.env.TAURI_DEV_HOST;
 
@@ -29,4 +30,9 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  resolve: {
+    alias: {
+      '@images': path.resolve(__dirname, 'src/assets/images')
+    }
+  }
 }));
