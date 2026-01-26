@@ -1,0 +1,11 @@
+{
+    "version": "0.1.3",
+    "notes": "Create the splash screen and update the applications logo",
+    "pub_date": "2026-01-26T12:00:00Z",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTd0lSanpxaGk0akVXZjMwbktOd3RqdE9BNC9xR2tGV3ZDVnBYN3VBU0FrQ1ZWcEhrUGozbTYyTnZ5MW5CeEVEeEEyU1pTOEgxdytrNnhnMDIzNVNYM2tGZWo4K3NybndJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzY5NDYxMjU1CWZpbGU6YnlhYXMtcHJvamVjdF8wLjEuM194NjQtc2V0dXAuZXhlCjU2WEdJbCtDc0x4R2tLM0xhb1pZdEFsRGkyaWhFNU4yQlJwUE5WeldWSC9oQ3JDNjFNbzZOUGUzNzd2Z3Z2N0pkejY0aTRpdGdnVnVrSFR2bnVKNEJnPT0K",
+            "url": "https://github.com/AND3SIL4/byaas/releases/latest/download/byaas-project_0.1.3_x64-setup.exe"
+        }
+    }
+}

@@ -1,207 +1,232 @@
-# Comprehensive Guide to Creating and Using an Installer
+# byaas-project
 
-This guide details the process of creating an installer for a desktop application in Windows using **Inno Setup**, from preparing the files to installing the application on other machines. It assumes you have a folder containing an `.exe` file (and possibly other files like DLLs or configurations) and want the application to be installed with shortcuts on the desktop and Start Menu, like a standard desktop application.
+A modern desktop application built with [Tauri 2.0](https://tauri.app/) and [React 19](https://react.dev/), combining web technologies with native performance.
 
----
+## 🚀 Overview
 
-## Prerequisites
-- **Inno Setup**: Download and install the stable version from [jrsoftware.org](https://jrsoftware.org/isdl.php) (recommended version: 6.x as of June 2025).
-- **Application Folder**: A folder with your `.exe` file and all necessary files (e.g., `C:\MyApp` with `myapp.exe`, `data.dll`, etc.).
-- **Icon (Optional)**: An `.ico` file to customize the installer and shortcuts (you can create one using tools like GIMP or [convertio.co](https://convertio.co)).
-- **Windows**: Windows operating system (10 or 11) for compiling and testing the installer.
+**byaas-project** is a cross-platform desktop application that leverages the power of React for the frontend and Rust for the backend through the Tauri framework. This architecture provides the best of both worlds: modern web development workflows with native performance and platform integration.
 
----
+### Key Features
 
-## Step-by-Step: Creating the Installer with Inno Setup
+- **Cross-platform**: Windows, macOS, and Linux support
+- **Modern Stack**: React 19 with Vite 7, Rust backend
+- **Fast Development**: Hot reload for both frontend and backend
+- **Native Integration**: File system, system APIs, and platform-specific features
+- **Small Bundle Size**: Optimized builds with minimal overhead
 
-### 1. Install Inno Setup
-1. Download Inno Setup from the official website.
-2. Run the installer and follow the instructions to install it on your machine.
-3. Open **Inno Setup Compiler** from the Start Menu.
+## 📁 Project Structure
 
-### 2. Prepare the Application Folder
-1. Organize all necessary files in an accessible folder. Example:
-   - Folder: `C:\MyApp`
-   - Contents: `myapp.exe`, `data.dll`, `config.ini`, etc.
-2. Ensure the `.exe` is a graphical user interface (GUI) application, not a console application. If it’s a console app, recompile it with the appropriate option (e.g., `--windowed` in PyInstaller for Python).
-3. (Optional) Prepare an `.ico` file (e.g., `myapp.ico`) for the installer and shortcuts. Place it in `C:\MyApp` or another location.
-
-### 3. Create the Inno Setup Script
-1. In Inno Setup Compiler, select **File > New** to open the **Script Wizard**.
-2. Configure the basic details in the wizard:
-   - **Application Name**: Name of the application (e.g., `MyApplication`).
-   - **Version**: Application version (e.g., `1.0`).
-   - **Publisher**: Your name or company (optional).
-   - **Website**: URL of your website (optional).
-   - **Output Directory**: Folder where the installer will be saved (e.g., `C:\MyApp\Output`).
-3. Select the application files:
-   - In **Application Files**, choose the folder `C:\MyApp`.
-   - Check the option to include all files and subfolders.
-   - Specify `myapp.exe` as the main executable file.
-4. Configure shortcuts:
-   - Check the options to create shortcuts on the **Desktop** and in the **Start Menu**.
-5. (Optional) In **Application Icon**, select the `.ico` file (e.g., `C:\MyApp\myapp.ico`).
-6. Complete the wizard. A script file with the `.iss` extension will be generated.
-
-### 4. Review and Customize the Script
-The wizard creates a basic script, but you can edit it for specific adjustments. Open the `.iss` file in Inno Setup Compiler or a text editor. Below is a sample script:
-
-```iss
-[Setup]
-AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
-AppName=MyApplication
-AppVersion=1.0
-AppPublisher=YourName
-AppPublisherURL=http://www.yourwebsite.com
-AppSupportURL=http://www.yourwebsite.com
-AppUpdatesURL=http://www.yourwebsite.com
-DefaultDirName={pf}\MyApplication
-DefaultGroupName=MyApplication
-OutputDir=C:\MyApp\Output
-OutputBaseFilename=SetupMyApp
-SetupIconFile=C:\MyApp\myapp.ico
-Compression=lzma
-SolidCompression=yes
-WizardStyle=modern
-
-[Languages]
-Name: "english"; MessagesFile: "compiler:Default.isl"
-
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-
-[Files]
-Source: "C:\MyApp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-
-[Icons]
-Name: "{group}\MyApplication"; Filename: "{app}\myapp.exe"
-Name: "{commondesktop}\MyApplication"; Filename: "{app}\myapp.exe"; WorkingDir: "{app}"; Tasks: desktopicon
-
-[Run]
-Filename: "{app}\myapp.exe"; Description: "{cm:LaunchProgram,MyApplication}"; Flags: nowait postinstall skipifsilent
+```
+byaas-project/
+├── src/                    # React frontend
+│   ├── main.jsx           # React entry point
+│   ├── App.jsx            # Main application component
+│   ├── App.css            # Styling with dark mode support
+│   └── assets/            # Static assets
+├── src-tauri/             # Rust backend
+│   ├── src/
+│   │   ├── main.rs        # Application entry point
+│   │   └── lib.rs         # Core logic and Tauri commands
+│   ├── Cargo.toml         # Rust dependencies
+│   ├── tauri.conf.json    # Tauri configuration
+│   └── icons/             # Application icons
+├── public/                # Static public assets
+├── package.json           # Frontend dependencies
+├── vite.config.js         # Vite configuration
+└── AGENTS.md              # Development guidelines
 ```
 
-**Explanation of Sections**:
-- `[Setup]`: Defines the name, version, installation folder (`{pf}` is `C:\Program Files`), icon, and installer settings.
-- `[Languages]`: Sets the installer language (English in this case).
-- `[Tasks]`: Allows the user to choose whether to create a desktop shortcut.
-- `[Files]`: Copies all files from `C:\MyApp` (including subfolders) to the installation folder.
-- `[Icons]`: Creates shortcuts in the Start Menu and (optionally) on the desktop.
-- `[Run]`: Allows launching the application after installation.
+## 🛠️ Technology Stack
 
-**Adjustments**:
-- Update paths (`C:\MyApp`, `myapp.exe`, `myapp.ico`) to match your setup.
-- If you need to install runtimes (e.g., Visual C++ Redistributable), add entries in `[Files]` and `[Run]` (see considerations).
+### Frontend
+- **React 19.1.0** - Modern UI framework
+- **Vite 7.0.4** - Fast build tool and dev server
+- **@tauri-apps/api 2.x** - Tauri frontend API
+- **CSS3** - Styling with dark mode support
 
-### 5. Compile the Installer
-1. In Inno Setup Compiler, select **Build > Compile** or press `Ctrl+F9`.
-2. If there are no errors, an executable file (e.g., `SetupMyApp.exe`) will be generated in the specified folder (`C:\MyApp\Output`).
-3. If errors occur, review the `.iss` script to fix paths or syntax issues.
+### Backend
+- **Rust** - Systems programming language
+- **Tauri 2.x** - Desktop app framework
+- **Serde 1.x** - JSON serialization
+- **tauri-plugin-opener** - URL opening functionality
 
-### 6. Test the Installer
-1. Run `SetupMyApp.exe` on your machine.
-2. Follow the installation wizard steps:
-   - Select the installation folder (default: `C:\Program Files\MyApplication`).
-   - Choose whether to create a desktop shortcut.
-3. Verify the results:
-   - Files are copied to `C:\Program Files\MyApplication`.
-   - Shortcuts are created on the **Desktop** (if selected) and in the **Start Menu** (under `MyApplication`).
-   - The application appears in **Settings > Apps > Installed Apps**.
-   - The `.exe` runs correctly when launched from the shortcuts.
+### Development Tools
+- **Bun** - Fast package manager
+- **VS Code** - Recommended IDE with Tauri and Rust extensions
 
-### 7. Distribute the Installer
-1. Copy `SetupMyApp.exe` to a USB drive, upload it to a cloud service, or share it via email or other means.
-2. The installer is self-contained and includes all files specified in the script.
+## 📋 Prerequisites
 
----
+Before running this project, ensure you have the following installed:
 
-## How to Use the Installer on Another Machine
-
-### 1. Copy the Installer
-- Transfer `SetupMyApp.exe` to the target machine (via USB, download, etc.).
-
-### 2. Run the Installer
-1. Double-click `SetupMyApp.exe`.
-2. If a "Unknown Publisher" warning appears, select **Run** (to avoid this, sign the installer; see considerations).
-3. Follow the installation wizard:
-   - Accept the terms.
-   - Select the installation folder.
-   - Choose whether to create a desktop shortcut.
-4. The installer will copy files, create shortcuts, and register the application.
-
-### 3. Use the Application
-1. Launch the application from:
-   - The **Desktop** shortcut.
-   - The Start Menu (under `MyApplication`).
-2. Verify that it runs correctly. If it doesn’t, check dependencies (see considerations).
-
-### 4. Uninstall the Application
-- The application is registered in **Settings > Apps > Installed Apps** or "Add or Remove Programs".
-- Select `MyApplication` and click **Uninstall**. This will remove the files and shortcuts.
-
----
-
-## Additional Considerations
-
-### 1. Including Dependencies
-If your `.exe` requires runtimes (e.g., Visual C++ Redistributable or .NET), include them in the installer. Example for Visual C++:
-
-```iss
-[Files]
-Source: "C:\MyApp\vc_redist.x64.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
-Source: "C:\MyApp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-
-[Run]
-Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/quiet /norestart"; StatusMsg: "Installing Visual C++ Redistributable..."; Flags: waituntilterminated
-```
-
-- Download the runtime from Microsoft’s official website.
-- Adjust the path and filename in the script.
-
-### 2. Signing the Installer
-To avoid security warnings:
-1. Purchase a code-signing certificate (from providers like DigiCert or Sectigo).
-2. Use `signtool` to sign the installer:
-   ```cmd
-   signtool sign /f your_certificate.pfx /p your_password /t http://timestamp.digicert.com SetupMyApp.exe
+1. **Bun** - Package manager
+   ```bash
+   curl -fsSL https://bun.sh/install | bash
    ```
 
-### 3. Troubleshooting
-- **The `.exe` doesn’t run**:
-  - Ensure all dependencies are included.
-  - Verify the required runtime is installed.
-  - Check permissions (it may need to run as administrator).
-- **Shortcuts aren’t created**:
-  - Confirm the `[Icons]` section is correct.
-- **Antivirus warnings**:
-  - Sign the installer and `.exe`.
-  - Ensure the files are trustworthy.
-- **Installer errors**:
-  - Check paths in the `.iss` script.
-  - Test compilation on a clean machine.
+2. **Rust** - Backend development
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   ```
 
-### 4. Compatibility
-- Ensure the `.exe` is compatible with the target machine’s architecture (32-bit or 64-bit).
-- Test the installer on different Windows versions (10, 11).
+3. **System Dependencies** - Platform-specific build tools
+   - **Ubuntu/Debian**: `sudo apt install libwebkit2gtk-4.0-dev build-essential`
+   - **macOS**: Xcode Command Line Tools
+   - **Windows**: Microsoft Visual Studio C++ Build Tools
 
-### 5. Advanced Customization
-- Add a license file to the installer (in `[Setup]`, use `LicenseFile`).
-- Customize the installer’s appearance with images (in `[Setup]`, use `WizardImageFile`).
-- Configure a custom uninstaller in the `[UninstallRun]` section.
+## 🚀 Quick Start
+
+### 1. Clone and Install
+```bash
+git clone <repository-url>
+cd byaas-project
+bun install
+```
+
+### 2. Development Mode
+```bash
+bun run tauri dev
+```
+
+This starts the development server with hot reload for both frontend and backend changes.
+
+### 3. Build for Production
+```bash
+bun run tauri build
+```
+
+Creates optimized desktop binaries for all platforms.
+
+## 📖 Available Commands
+
+### Development
+```bash
+bun run dev                    # Start Vite dev server (frontend only)
+bun run tauri dev             # Full Tauri development with hot reload
+```
+
+### Production
+```bash
+bun run build                  # Build frontend for production
+bun run tauri build           # Build complete desktop application
+bun run preview               # Preview production build
+```
+
+### Package Management
+```bash
+bun install                   # Install all dependencies
+bun add <package>             # Add new frontend dependency
+bun add <package> -D          # Add dev dependency
+```
+
+## 🏗️ Architecture
+
+### Frontend-Backend Communication
+
+The application uses Tauri's command system for secure frontend-backend communication:
+
+```javascript
+// Frontend (React)
+import { invoke } from "@tauri-apps/api/core";
+
+const result = await invoke("greet", { name: "World" });
+```
+
+```rust
+// Backend (Rust)
+#[tauri::command]
+fn greet(name: &str) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", name)
+}
+```
+
+### Component Pattern
+
+```jsx
+import { useState } from "react";
+import { invoke } from "@tauri-apps/api/core";
+
+function Component() {
+  const [state, setState] = useState("");
+
+  async function handleAction() {
+    const result = await invoke("command_name", { param: state });
+    // Handle result
+  }
+
+  return <div>{/* JSX content */}</div>;
+}
+```
+
+## ⚙️ Configuration
+
+### Tauri Configuration (`src-tauri/tauri.conf.json`)
+
+- **Window Size**: 800x600 pixels
+- **Development Port**: 1420 (fixed)
+- **Bundle Targets**: All platforms
+- **Security**: CSP null (development mode only)
+
+### Vite Configuration (`vite.config.js`)
+
+- **Port**: 1420 (strict, required by Tauri)
+- **HMR**: Enabled on port 1421
+- **Ignored**: `src-tauri` directory
+
+## 🎨 Features
+
+### Current Functionality
+
+- **Greeting System**: Interactive form demonstrating frontend-backend communication
+- **Template Landing Page**: Educational links to Tauri, Vite, and React documentation
+- **Cross-platform Support**: Native builds for Windows, macOS, and Linux
+- **Dark Mode Ready**: CSS structure supports theme switching
+
+### Extending the Application
+
+1. **Add New Commands**: Define in `src-tauri/src/lib.rs`
+2. **Create Components**: Add to `src/` directory
+3. **Styling**: Use CSS modules or scoped classes
+4. **State Management**: Implement with React hooks or external libraries
+
+## 🔧 Development Workflow
+
+### Making Changes
+
+1. **Frontend Changes**: Auto-reload in `bun run tauri dev`
+2. **Backend Changes**: Restart dev server after Rust modifications
+3. **Testing**: Use browser dev tools for frontend, console for backend
+
+### Debugging
+
+- **Frontend**: Browser developer tools
+- **Backend**: Console output and `println!` statements
+- **Tauri**: `bun run tauri dev --debug` for additional logging
+
+## 📚 Documentation
+
+- **[Tauri Documentation](https://tauri.app/develop/)** - Framework guides and API reference
+- **[React Documentation](https://react.dev/)** - React features and best practices
+- **[Vite Documentation](https://vite.dev/)** - Build tool configuration
+- **[AGENTS.md](./AGENTS.md)** - Development guidelines for coding agents
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙋‍♂️ Support
+
+- **Issues**: Report bugs via GitHub Issues
+- **Questions**: Use GitHub Discussions
+- **Community**: Join the [Tauri Discord](https://discord.gg/tauri)
 
 ---
 
-## Practical Example
-1. You have a folder `C:\MyApp` with `myapp.exe`, `data.dll`, and `myapp.ico`.
-2. You create the `.iss` script as shown above.
-3. You compile the installer, generating `SetupMyApp.exe`.
-4. You copy `SetupMyApp.exe` to another machine.
-5. You run the installer, which creates shortcuts and registers the application.
-6. You launch the application from the desktop, and it works correctly.
-
----
-
-## Conclusion
-With Inno Setup, you can create a professional installer that distributes your application as a standard desktop application. The installer is portable, user-friendly, and enables a clean installation on any compatible Windows machine. Ensure all dependencies are included and test on different environments to guarantee a seamless experience.
-
-For additional support, refer to the official Inno Setup documentation at [jrsoftware.org](https://jrsoftware.org/ishelp/) or provide specific details about your project (e.g., `.exe` language, dependencies) for tailored assistance.
+**Built with ❤️ using Tauri + React**
