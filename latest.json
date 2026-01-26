@@ -1,0 +1,11 @@
+{
+    "version": "0.1.0",
+    "notes": "Configurate the updater plugin",
+    "pub_date": "2026-01-26T12:00:00Z",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTd0lSanpxaGk0akZka1dBekR1YjBuTTBSNGRycVdkZVUrdWlJbkQ4Z1Qwb2IwWGh1WSt0eGY5LzF0TStBZmVMQ2t6QWVQelZaZS9GaS80OGw4aDQxeFdaeElzaVRhN3c4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzY5NDQ3ODg3CWZpbGU6YnlhYXMtcHJvamVjdF8wLjEuMV94NjQtc2V0dXAuZXhlCjVvMmtpZkQ5N0hxVHhKN01PWjNRVTJISEcvZWlQbHBDYmVXRU5ER3BjcEdGNmFlc1ZIcHpYeDJia2tFTG15V3VRanhQOSs5TStRZ3lqdU1MSThVL0FRPT0K",
+            "url": "https://github.com/AND3SIL4/byaas/releases/latest/download/byaas-project_0.1.1_x64-setup.exe"
+        }
+    }
+}
