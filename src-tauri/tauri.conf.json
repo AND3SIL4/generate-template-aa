@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Byaas (build your Automation Anywhere Scaffold)",
+        "title": "Byaas (Build Your Automation Anywhere Scaffold)",
         "width": 800,
         "height": 600
       }
