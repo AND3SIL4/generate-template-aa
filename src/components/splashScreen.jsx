@@ -33,7 +33,7 @@ function SplashScreen({ onComplete }) {
             }
         }
         loadNextStage();
-    }, [onComplete])
+    }, [])
 
     return (
         <div className={`h-screen flex justify-center items-center flex-col gap-2 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>

@@ -1,17 +1,41 @@
-import "./App.css";
 import { useEffect, useState } from "react";
-import { check } from "@tauri-apps/plugin-updater"
-import SplashScreen from "./components/splashScreen";
+import { toast } from "sonner";
+import "./App.css";
 import ScaffoldForm from "./components/scaffoldForm";
-import { Toaster } from "sonner";
+import SplashScreen from "./components/splashScreen";
+import { checkUpdate } from "./services/updater";
 
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [hasUpdate, setHasUpdate] = useState(false);
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(true);
+
+  useEffect(() => {
+    const checkForUpdates = async () => {
+      try {
+        const updateAvailable = await checkUpdate();
+        setHasUpdate(updateAvailable);
+      } catch (error) {
+        console.error("Error checking for updates", error);
+      } finally {
+        setIsCheckingUpdate(false);
+      }
+    }
+
+    checkForUpdates();
+  }, [])
+
+  useEffect(() => {
+    if (!isCheckingUpdate && hasUpdate) {
+      toast.info(`There is an update available v${hasUpdate.version}`);
+    }
+  }, [hasUpdate, isCheckingUpdate])
 
   if (showSplash) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />
   }
+
 
 
   // useEffect(() => {
@@ -52,10 +76,7 @@ function App() {
 
 
   return (
-    <>
-      <Toaster expand visibleToasts={5} position="bottom-center" richColors />
-      <ScaffoldForm />
-    </>
+    <ScaffoldForm />
   )
 }
 
