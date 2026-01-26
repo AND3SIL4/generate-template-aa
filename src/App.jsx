@@ -50,7 +50,7 @@ function App() {
 
 
   return (
-    <h1 className="text-yellow-600">Byaas project v0.1.2</h1>
+    <h1 className="text-info">Byaas project v0.1.2</h1>
   )
 }
 
