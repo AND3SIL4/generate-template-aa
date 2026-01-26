@@ -2,6 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { check } from "@tauri-apps/plugin-updater"
 import SplashScreen from "./components/splashScreen";
+import ScaffoldForm from "./components/scaffoldForm";
 
 
 function App() {
@@ -50,7 +51,7 @@ function App() {
 
 
   return (
-    <h1 className="text-info">Byaas project v0.1.2</h1>
+    <ScaffoldForm />
   )
 }
 
