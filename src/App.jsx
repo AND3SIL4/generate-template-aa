@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { check } from "@tauri-apps/plugin-updater"
 import SplashScreen from "./components/splashScreen";
 import ScaffoldForm from "./components/scaffoldForm";
+import { Toaster } from "sonner";
 
 
 function App() {
@@ -51,7 +52,10 @@ function App() {
 
 
   return (
-    <ScaffoldForm />
+    <>
+      <Toaster expand visibleToasts={5} position="bottom-center" richColors />
+      <ScaffoldForm />
+    </>
   )
 }
 
