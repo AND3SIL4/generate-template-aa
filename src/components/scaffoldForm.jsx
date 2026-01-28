@@ -19,19 +19,18 @@ function ScaffoldForm() {
 
 
     return (
-        <form onSubmit={(e) => e.preventDefault()} className="
-            flex flex-col gap-6 w-full max-w-xl
-            bg-white
-            p-6 sm:p-8 md:p-10
-            rounded-md shadow-2xl
-            backdrop-blur-sm
-        ">
+        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col
+        gap-6 w-full max-w-xl bg-white p-6 sm:p-8 md:p-10 rounded-md shadow-2xl
+        backdrop-blur-sm">
             {/* Section of the header int the form */}
             <div className="mb-11">
-                <h1 className='text-center text-2xl text-muted'>Rename, compress and generate the best practice Automation Anywhere template</h1>
+                <h1 className='text-center text-2xl text-muted'>
+                    Rename, compress and generate the best practice Automation Anywhere template
+                </h1>
                 <p className='text-center text-xs italic text-muted'>
-                    This application is made in order to automate the generation of best practice template,
-                    which return a <Tag text={".zip"} /> file that you only have to import in your Control Room
+                    This application is made in order to automate the generation of best practice
+                    template, which return a <Tag text={".zip"} /> file that you only have to
+                    import in your Control Room
                 </p>
             </div>
 
@@ -77,7 +76,8 @@ function ScaffoldForm() {
                     alert("todo: generate the bestpractice template in rust")
                     console.log(scaffoldData);
                 }}
-                className="mt-11 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="mt-11 px-6 py-3 bg-blue-600 text-white rounded-lg
+                hover:bg-blue-700"
             >
                 Generate Scaffold Template (.zip)
             </button>
