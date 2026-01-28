@@ -16,7 +16,7 @@ function ScaffoldForm() {
             flex flex-col gap-6 w-full max-w-xl
             bg-white
             p-6 sm:p-8 md:p-10
-            rounded-2xl shadow-2xl
+            rounded-md shadow-2xl
             backdrop-blur-sm
         ">
             <div className="mb-11">
