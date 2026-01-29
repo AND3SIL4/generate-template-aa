@@ -7,9 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# App-specific
-latest.json
-
 node_modules
 dist
 dist-ssr
@@ -25,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+latest.json
