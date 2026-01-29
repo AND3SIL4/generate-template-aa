@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    byaas_project_lib::run()
+    byaas_lib::run(); // Application entry point
 }
