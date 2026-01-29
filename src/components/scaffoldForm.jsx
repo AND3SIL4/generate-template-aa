@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import AddPhase from '../shared/addPhase';
 import Input from '../shared/ui/input';
 import PhaseList from '../shared/ui/listPhases';
 import RadioButton from '../shared/ui/radioButtons';
 import Tag from '../shared/ui/tag';
-import { toast } from 'sonner';
+import { invoke } from '@tauri-apps/api/core';
 
 const CUSTOMERS = [
     { id: 1, value: "keralty", label: "Keralty" },
@@ -14,13 +15,24 @@ const CUSTOMERS = [
 function ScaffoldForm() {
     const [scaffoldData, setScaffoldData] = useState({
         name: "",
-        fases: [],
+        phases: [],
         customer: ""
     });
 
     // Validate data to enable button
     const isValidData = scaffoldData.name.trim() && scaffoldData.customer.trim();
 
+
+    async function handleGeneration() {
+        try {
+            const idToast = toast.loading("Generating template");
+            await invoke("generate_template", { scaffoldData: scaffoldData })
+            toast.dismiss(idToast);
+            toast.success("Template generated successfully")
+        } catch (error) {
+            toast.error(error);
+        }
+    }
     return (
         <form onSubmit={(e) => e.preventDefault()} className="flex flex-col
         gap-6 w-full max-w-xl bg-white p-6 sm:p-8 md:p-10 rounded-md shadow-2xl
@@ -53,11 +65,11 @@ function ScaffoldForm() {
 
             {/* Show list of phases added */}
             <PhaseList
-                fases={scaffoldData.fases}
+                phases={scaffoldData.phases}
                 onRemove={(index) =>
                     setScaffoldData((prev) => ({
                         ...prev,
-                        fases: prev.fases.filter((_, i) => i !== index),
+                        phases: prev.phases.filter((_, i) => i !== index),
                     }))
                 }
             />
@@ -68,22 +80,19 @@ function ScaffoldForm() {
                     const name = phaseName.trim();
                     if (!name) return; // Do not accept empty values
                     // Vaidate if the phase name already exists
-                    const lowerNames = scaffoldData.fases.map(e => e.toLowerCase());
+                    const lowerNames = scaffoldData.phases.map(e => e.toLowerCase());
                     if (lowerNames.includes(name.toLowerCase())) {
                         toast.warning(`You cannot set the phase '${phaseName}' because already exist in phases added`)
                         return;
                     }
-                    setScaffoldData(prev => ({ ...prev, fases: [...prev.fases, phaseName] }));
+                    setScaffoldData(prev => ({ ...prev, phases: [...prev.phases, phaseName] }));
                 }}
             />
 
             {/* Call to action section */}
             <button
                 type="button"
-                onClick={() => {
-                    alert("todo: generate the bestpractice template in rust")
-                    console.log(scaffoldData);
-                }}
+                onClick={handleGeneration}
                 className="mt-11 px-6 py-3 bg-blue-600 text-white rounded-lg
                 hover:bg-blue-700"
                 disabled={!isValidData}
