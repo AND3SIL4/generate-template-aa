@@ -4,6 +4,7 @@ import Input from '../shared/ui/input';
 import PhaseList from '../shared/ui/listPhases';
 import RadioButton from '../shared/ui/radioButtons';
 import Tag from '../shared/ui/tag';
+import { toast } from 'sonner';
 
 const CUSTOMERS = [
     { id: 1, value: "keralty", label: "Keralty" },
@@ -17,6 +18,8 @@ function ScaffoldForm() {
         customer: ""
     });
 
+    // Validate data to enable button
+    const isValidData = scaffoldData.name.trim() && scaffoldData.customer.trim();
 
     return (
         <form onSubmit={(e) => e.preventDefault()} className="flex flex-col
@@ -61,12 +64,17 @@ function ScaffoldForm() {
 
             {/* Add phase section */}
             <AddPhase
-                onAdd={(phaseName) =>
-                    setScaffoldData((prev) => ({
-                        ...prev,
-                        fases: [...prev.fases, phaseName],
-                    }))
-                }
+                onAdd={(phaseName) => {
+                    const name = phaseName.trim();
+                    if (!name) return; // Do not accept empty values
+                    // Vaidate if the phase name already exists
+                    const lowerNames = scaffoldData.fases.map(e => e.toLowerCase());
+                    if (lowerNames.includes(name.toLowerCase())) {
+                        toast.warning(`You cannot set the phase '${phaseName}' because already exist in phases added`)
+                        return;
+                    }
+                    setScaffoldData(prev => ({ ...prev, fases: [...prev.fases, phaseName] }));
+                }}
             />
 
             {/* Call to action section */}
@@ -78,8 +86,11 @@ function ScaffoldForm() {
                 }}
                 className="mt-11 px-6 py-3 bg-blue-600 text-white rounded-lg
                 hover:bg-blue-700"
+                disabled={!isValidData}
+                style={{ opacity: isValidData ? 1 : 0.3 }}
             >
-                Generate Scaffold Template (.zip)
+                {isValidData ? "Generate Scaffold Template (.zip)"
+                    : "Ensure you fill out the project name and choose a customer"}
             </button>
         </form>
     )
