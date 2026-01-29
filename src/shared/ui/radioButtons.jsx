@@ -16,7 +16,6 @@ function RadioButtons({ items, val, name, onChange }) {
                 </div>
             ))}
         </div>
-
     )
 }
 
