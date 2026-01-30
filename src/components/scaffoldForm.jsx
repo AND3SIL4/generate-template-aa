@@ -26,9 +26,9 @@ function ScaffoldForm() {
     async function handleGeneration() {
         try {
             const idToast = toast.loading("Generating template");
-            await invoke("generate_template", { scaffoldData: scaffoldData })
+            const response = await invoke("generate_template", { scaffoldData: scaffoldData })
             toast.dismiss(idToast);
-            toast.success("Template generated successfully")
+            toast.success(response.msg, { description: response.details, duration: 10000 });
         } catch (error) {
             toast.error(error);
         }
