@@ -3,11 +3,11 @@ use std::{env::temp_dir, fs, path::Path};
 use directories::UserDirs;
 
 use crate::domain::{
-    constants::TEMP_FOLDER,
+    constants::{CURRENT_TEMPLATE_NAME, TEMP_FOLDER},
     implementations::{ScaffoldData, ScaffoldResponse},
 };
 use crate::infra::zipper;
-use crate::services::github_releases;
+use crate::services::{generate_scaffold, github_releases};
 
 #[tauri::command]
 pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse, String> {
@@ -16,7 +16,8 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
     temp_folder.push(TEMP_FOLDER); // Add a temp folder to isolate the activities
     fs::create_dir_all(&temp_folder).map_err(|e| e.to_string())?;
 
-    let template_file = github_releases::download_current_template(&temp_folder)?;
+    let template_file =
+        github_releases::download_current_template(&temp_folder, &scaffold_data.customer)?;
     zipper::unzipfile(&template_file, &temp_folder)?; // Unzip downloaded file
     fs::remove_file(&template_file).map_err(|e| e.to_string())?; // Remove after extract all the content
 
@@ -26,7 +27,17 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
         .ok_or("Error finding downloads dir")?;
     let final_file = format!("{}\\{}.zip", final_folder.display(), scaffold_data.name);
 
-    zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
+    // Backend and scaffold generation logic
+    // 1. Validate if the project has phases
+    if scaffold_data.phases.is_empty() {
+        // Call generate basic scaffold
+        generate_scaffold::basic_scaffold(&temp_folder, &scaffold_data.name, CURRENT_TEMPLATE_NAME);
+    } else {
+        // Call generate basic scaffold with all phases
+        generate_scaffold::scaffold_with_phases();
+    }
 
-    Ok(ScaffoldResponse::success("Downloads Folder".to_string()))
+    zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
+    fs::remove_dir_all(&temp_folder).map_err(|e| e.to_string())?;
+    Ok(ScaffoldResponse::success(&final_file))
 }
