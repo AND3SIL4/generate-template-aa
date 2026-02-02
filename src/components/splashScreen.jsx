@@ -40,7 +40,7 @@ function SplashScreen({ onComplete }) {
             `h-screen flex justify-center items-center flex-col gap-2 
             ${fadeOut ? 'opacity-0' : 'opacity-100'} bg-linear-to-tr from-white to-blue-100`
         }>
-            <img src={logo} alt="Logo Net Applications" className=" w-96" />
+            <img src={logo} alt="Logo Net Applications" className="w-60" />
             <p className="text-slate-400 animate-pulse">BYAAS (Build Your Automation Anywhere Scaffold)</p>
             <ProgressStatusBar progress={progress} message={message} />
         </div >
