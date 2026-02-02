@@ -1,6 +1,7 @@
 // Application run time, strong need to build the app
 mod commands;
 mod domain;
+mod infra;
 mod services;
 
 pub fn run() {
