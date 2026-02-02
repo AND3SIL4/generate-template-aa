@@ -6,11 +6,14 @@ use std::{
 };
 
 use crate::domain::constants::CURRENT_TEMPLATE_NAME;
-use crate::domain::constants::GITHUB_RELEASE;
+use crate::domain::constants::{GENERAL, KERALTY};
 
-pub fn download_current_template(download_path: &Path) -> Result<PathBuf, String> {
+pub fn download_current_template(download_path: &Path, customer: &str) -> Result<PathBuf, String> {
     let client = Client::new(); // Create the https client
-    let url = GITHUB_RELEASE; // Point to github releases
+    let url = match customer {
+        "keralty" => KERALTY,
+        _ => GENERAL,
+    };
 
     // Get the response calling the url
     let response = client.get(url).send().map_err(|e| e.to_string())?;

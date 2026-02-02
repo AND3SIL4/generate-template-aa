@@ -7,7 +7,7 @@ pub struct ScaffoldResponse {
 }
 
 impl ScaffoldResponse {
-    pub fn success(path: String) -> Self {
+    pub fn success(path: &str) -> Self {
         Self {
             msg: "Template generated successfully".into(),
             details: format!(
