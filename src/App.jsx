@@ -3,82 +3,111 @@ import { toast } from "sonner";
 import "./App.css";
 import ScaffoldForm from "./components/scaffoldForm";
 import SplashScreen from "./components/splashScreen";
-import { checkUpdate } from "./services/updater";
-
+import { checkUpdate, downloadAndInstall, forceRelaunch } from "./services/updater";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-  const [hasUpdate, setHasUpdate] = useState(false);
-  const [isCheckingUpdate, setIsCheckingUpdate] = useState(true);
+  const [updateInfo, setUpdateInfo] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const checkForUpdates = async () => {
-      try {
-        const updateAvailable = await checkUpdate();
-        setHasUpdate(updateAvailable);
-      } catch (error) {
-        console.error("Error checking for updates", error);
-      } finally {
-        setIsCheckingUpdate(false);
+    async function initCheck() {
+      const update = await checkUpdate((error) => {
+        toast.error("Could not check for updates", {
+          description: error?.message || "Please try again later",
+        });
+      });
+
+      setUpdateInfo(update);
+
+      if (update) {
+        toast.info(`New version available: v${update.version}`, {
+          id: "update-available",
+          duration: Infinity,
+          action: {
+            label: "Download and install",
+            onClick: startDownload,
+          },
+        });
       }
     }
 
-    checkForUpdates();
-  }, [])
+    initCheck();
+  }, []);
 
-  useEffect(() => {
-    if (!isCheckingUpdate && hasUpdate) {
-      toast.info(`There is an update available v${hasUpdate.version}`);
-    }
-  }, [hasUpdate, isCheckingUpdate])
+  const startDownload = () => {
+    toast.dismiss("update-available");
+    setIsDownloading(true);
+    setProgress(0);
+
+    const toastId = toast.loading("Downloading update... 0%");
+
+    downloadAndInstall(
+      // onProgress
+      ({ percent }) => {
+        setProgress(percent);
+        toast.loading(`Downloading update... ${percent}%`, { id: toastId });
+      },
+      // onComplete
+      () => {
+        toast.success("Update installed", {
+          description: "Restarting in 3 seconds...",
+          duration: 4000,
+        });
+        setTimeout(forceRelaunch, 3000);
+      },
+      // onError
+      (error) => {
+        toast.error("Update failed", {
+          description: error?.message || "Please try again later",
+        });
+        setIsDownloading(false);
+      }
+    );
+  };
 
   if (showSplash) {
-    return <SplashScreen onComplete={() => setShowSplash(false)} />
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
-
-
-  // useEffect(() => {
-  //   async function runUpdaterCheck() {
-  //     try {
-  //       const update = await check()
-  //       if (update) {
-  //         console.log(
-  //           `Found a new version ${update.version} from ${update.date} with notes ${update.body}`
-  //         );
-
-  //         await update.downloadAndInstall((event) => {
-  //           switch (event) {
-  //             case "Started":
-  //               contentLength = event.data.contentLength;
-  //               console.log(`Started downloading ${contentLength} bytes`);
-  //               break;
-  //             case "Progress":
-  //               downloaded += event.data.chunkLenght;
-  //               console.log(`Downloaded ${downloaded} from ${contentLength}`);
-  //               break;
-  //             case "Finished":
-  //               console.log("Download finished");
-  //               break;
-  //             default:
-  //               break;
-  //           }
-  //         })
-
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-
-  //   runUpdaterCheck()
-  // }, [])
-
+  if (isDownloading) {
+    return (
+      <div style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "1rem"
+      }}>
+        <h2>Installing update</h2>
+        <div style={{
+          width: "320px",
+          height: "24px",
+          background: "#333",
+          borderRadius: "12px",
+          overflow: "hidden",
+        }}>
+          <div
+            style={{
+              width: `${progress}%`,
+              height: "100%",
+              background: "#0ea5e9",
+              transition: "width 0.25s ease-out",
+            }}
+          />
+        </div>
+        <p>{progress}% – Please wait</p>
+      </div>
+    );
+  }
 
   return (
-    <ScaffoldForm />
-  )
+    <div className="flex flex-col justify-center items-center w-screen h-screen">
+      <ScaffoldForm />
+    </div>
+  );
 }
-
 
 export default App;

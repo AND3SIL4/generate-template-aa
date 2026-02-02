@@ -26,10 +26,11 @@ bun run preview               # Preview production build
 ```
 
 ### Testing
-**Note**: No test framework is currently configured. When adding tests:
-- Consider Vitest for React components
-- Use Rust's built-in test framework for backend
-- Add test scripts to package.json as needed
+```bash
+cargo test                     # Run Rust tests
+cargo test test_name          # Run single Rust test
+# Frontend tests: Add Vitest config to package.json when needed
+```
 
 ## Code Style Guidelines
 
@@ -37,48 +38,42 @@ bun run preview               # Preview production build
 
 #### Component Structure
 - Use functional components with hooks (no class components)
-- Follow the existing pattern: imports first, then component, then export
+- Follow pattern: imports first, then component, then export
 - Use PascalCase for component names
-- Keep components in separate files when they grow beyond 50 lines
+- Keep components in separate files when >50 lines
 
 ```jsx
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import "./Component.css";
 
 function ComponentName() {
   const [state, setState] = useState("");
 
   async function handleAction() {
-    // Tauri command calls go here
-    const result = await invoke("command_name", { param: state });
+    try {
+      const result = await invoke("command_name", { param: state });
+    } catch (error) {
+      toast.error(error);
+    }
   }
 
-  return (
-    <main className="container">
-      {/* JSX content */}
-    </main>
-  );
+  return <main className="container">{/* JSX */}</main>;
 }
-
 export default ComponentName;
 ```
 
 #### Imports
-- React hooks first: `import { useState, useEffect } from "react";`
-- Tauri API second: `import { invoke } from "@tauri-apps/api/core";`
-- Local imports third: `import "./App.css";`
-- Asset imports last: `import logo from "./assets/logo.svg";`
+- React hooks: `import { useEffect, useState } from "react";`
+- External libs: `import { toast } from "sonner";`
+- Tauri API: `import { invoke } from "@tauri-apps/api/core";`
+- Local imports: `import "./Component.css";`
 
 #### State Management
-- Use `useState` for local component state
-- Use `invoke()` for all Tauri backend communication
-- Async functions should handle errors appropriately
-
-#### CSS
-- Use CSS modules or scoped classes (see App.css pattern)
-- Support dark mode with CSS custom properties
-- Use flexbox for layouts (follow existing container pattern)
+- Use `useState`/`useEffect` for component state
+- Use `invoke()` for Tauri backend communication
+- Handle async errors with try/catch
+- Use `sonner` for toast notifications
 
 ### Rust Backend
 
