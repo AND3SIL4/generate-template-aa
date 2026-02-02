@@ -345,6 +345,7 @@ name = "byaas-project"
 version = "0.2.0"
 dependencies = [
  "directories",
+ "fs_extra",
  "regex",
  "reqwest 0.13.1",
  "serde",

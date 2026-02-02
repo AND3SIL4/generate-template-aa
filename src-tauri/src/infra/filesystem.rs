@@ -1,5 +1,9 @@
-use std::path::{Path, PathBuf};
+use std::{
+    io::Result,
+    path::{Path, PathBuf},
+};
 
+use fs_extra::dir::{self, move_dir, CopyOptions};
 use regex::Regex;
 use walkdir::WalkDir;
 
@@ -19,4 +23,16 @@ pub fn collect_renames(folder: &Path, re: &Regex, new_name: &str) -> Vec<(PathBu
     }
     to_rename.sort_by_key(|(old, _)| std::cmp::Reverse(old.components().count()));
     to_rename
+}
+
+pub fn copy_folder_content(src: &PathBuf, destionation: &PathBuf) -> Result<()> {
+    let options = CopyOptions::new().overwrite(true).copy_inside(true);
+    let _ = dir::copy(src, destionation, &options);
+    Ok(())
+}
+
+pub fn move_folder(src: &PathBuf, destination: &PathBuf) -> Result<()> {
+    let options = CopyOptions::new().overwrite(true).content_only(true);
+    let _ = move_dir(src, destination, &options);
+    Ok(())
 }

@@ -7,13 +7,10 @@ pub struct ScaffoldResponse {
 }
 
 impl ScaffoldResponse {
-    pub fn success(path: &str) -> Self {
+    pub fn success(path: &str, matches: &usize) -> Self {
         Self {
             msg: "Template generated successfully".into(),
-            details: format!(
-                "Please check the following path where you template is located '{}'",
-                path
-            ),
+            details: format!("Total matches: '{}'\n Final location: '{}'", matches, path),
         }
     }
 }

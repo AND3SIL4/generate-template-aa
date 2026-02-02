@@ -29,15 +29,36 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
 
     // Backend and scaffold generation logic
     // 1. Validate if the project has phases
+    let mut total_matches = 0;
     if scaffold_data.phases.is_empty() {
         // Call generate basic scaffold
-        generate_scaffold::basic_scaffold(&temp_folder, &scaffold_data.name, CURRENT_TEMPLATE_NAME);
+        let (success, _, tmp_total_matches) = generate_scaffold::basic_scaffold(
+            &temp_folder,
+            &scaffold_data.name,
+            CURRENT_TEMPLATE_NAME,
+        );
+        if !success {
+            return Err("Error creating template, please contact the administrator".to_string());
+        }
+        total_matches = tmp_total_matches; // Assign the total matches to display the success message
     } else {
         // Call generate basic scaffold with all phases
-        generate_scaffold::scaffold_with_phases();
+        match generate_scaffold::scaffold_with_phases(
+            &temp_folder,
+            &scaffold_data.name,
+            CURRENT_TEMPLATE_NAME,
+            &scaffold_data.phases,
+        ) {
+            Ok(tmp_total_matches) => {
+                total_matches = tmp_total_matches;
+            }
+            Err(e) => {
+                return Err(format!("Error creating template: {}", e));
+            }
+        }
     }
 
-    zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
-    fs::remove_dir_all(&temp_folder).map_err(|e| e.to_string())?;
-    Ok(ScaffoldResponse::success(&final_file))
+    // zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
+    // fs::remove_dir_all(&temp_folder).map_err(|e| e.to_string())?;
+    Ok(ScaffoldResponse::success(&final_file, &total_matches))
 }
