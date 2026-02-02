@@ -1,12 +1,7 @@
-use directories::UserDirs;
 use reqwest::blocking::{Client, Response};
 use std::{fs::File, io::Write, path::PathBuf};
 
-fn get_download_dir() -> Option<PathBuf> {
-    let user_dirs = UserDirs::new()?;
-    let download_dir = user_dirs.download_dir()?;
-    Some(download_dir.to_path_buf())
-}
+use crate::domain::utils::get_download_dir;
 
 pub fn download_current_template() -> Result<PathBuf, String> {
     let client: Client = Client::new(); // Create the https client

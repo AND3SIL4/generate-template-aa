@@ -1,5 +1,4 @@
-use crate::domain::implementations::ScaffoldResponse;
-use crate::domain::structs::ScaffoldData;
+use crate::domain::implementations::{ScaffoldData, ScaffoldResponse};
 use crate::services::github_releases;
 
 #[tauri::command]
