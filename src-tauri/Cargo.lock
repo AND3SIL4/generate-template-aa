@@ -354,6 +354,7 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-updater",
  "updater",
+ "walkdir",
  "zip 7.2.0",
 ]
 

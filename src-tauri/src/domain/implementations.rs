@@ -20,7 +20,7 @@ impl ScaffoldResponse {
 
 #[derive(Deserialize)]
 pub struct ScaffoldData {
-    name: String,
-    phases: Vec<String>,
-    customer: String,
+    pub name: String,
+    pub phases: Vec<String>,
+    pub customer: String,
 }

@@ -1,4 +1,6 @@
-use std::{env::temp_dir, fs};
+use std::{env::temp_dir, fs, path::Path};
+
+use directories::UserDirs;
 
 use crate::domain::{
     constants::TEMP_FOLDER,
@@ -17,6 +19,14 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
     let template_file = github_releases::download_current_template(&temp_folder)?;
     zipper::unzipfile(&template_file, &temp_folder)?; // Unzip downloaded file
     fs::remove_file(&template_file).map_err(|e| e.to_string())?; // Remove after extract all the content
+
+    let user_dirs = UserDirs::new().ok_or("Error getting user dirs")?;
+    let final_folder = user_dirs
+        .download_dir()
+        .ok_or("Error finding downloads dir")?;
+    let final_file = format!("{}\\{}.zip", final_folder.display(), scaffold_data.name);
+
+    zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
 
     Ok(ScaffoldResponse::success("Downloads Folder".to_string()))
 }
