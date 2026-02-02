@@ -1,3 +1,4 @@
+import { invoke } from '@tauri-apps/api/core';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import AddPhase from '../shared/addPhase';
@@ -5,7 +6,6 @@ import Input from '../shared/ui/input';
 import PhaseList from '../shared/ui/listPhases';
 import RadioButton from '../shared/ui/radioButtons';
 import Tag from '../shared/ui/tag';
-import { invoke } from '@tauri-apps/api/core';
 
 const CUSTOMERS = [
     { id: 1, value: "keralty", label: "Keralty" },
@@ -24,13 +24,15 @@ function ScaffoldForm() {
 
 
     async function handleGeneration() {
+        const idToast = "generate-template";
         try {
-            const idToast = toast.loading("Generating template");
+            toast.loading("Generating template", { id: idToast });
             const response = await invoke("generate_template", { scaffoldData: scaffoldData })
-            toast.dismiss(idToast);
-            toast.success(response.msg, { description: response.details, duration: 10000 });
+            toast.success(response.msg, {
+                description: response.details, duration: 10000, id: idToast
+            });
         } catch (error) {
-            toast.error(error);
+            toast.error(error, { id: idToast });
         }
     }
     return (
