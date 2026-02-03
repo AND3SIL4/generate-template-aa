@@ -32,15 +32,21 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
     let total_matches;
     if scaffold_data.phases.is_empty() {
         // Call generate basic scaffold
-        let (success, _, tmp_total_matches) = generate_scaffold::basic_scaffold(
+        match generate_scaffold::basic_scaffold(
             &temp_folder,
             &scaffold_data.name,
             CURRENT_TEMPLATE_NAME,
-        );
-        if !success {
-            return Err("Error creating template, please contact the administrator".to_string());
+        ) {
+            Ok(tmp_total_matches) => {
+                total_matches = tmp_total_matches;
+            }
+            Err(e) => {
+                return Err(format!(
+                    "Error creating template, please contact the administrator: {}",
+                    e
+                ));
+            }
         }
-        total_matches = tmp_total_matches; // Assign the total matches to display the success message
     } else {
         // Call generate basic scaffold with all phases
         match generate_scaffold::scaffold_with_phases(
@@ -53,7 +59,10 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
                 total_matches = tmp_total_matches;
             }
             Err(e) => {
-                return Err(format!("Error creating template: {}", e));
+                return Err(format!(
+                    "Error creating template with phases please contact the administrator: {}",
+                    e
+                ));
             }
         }
     }

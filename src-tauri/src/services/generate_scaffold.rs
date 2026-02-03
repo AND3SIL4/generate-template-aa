@@ -13,17 +13,10 @@ pub fn basic_scaffold(
     folder_path: &Path,
     new_name: &str,
     current_template_name: &str,
-) -> (bool, Vec<String>, usize) {
-    let re = match Regex::new(&current_template_name) {
-        Ok(regex) => regex,
-        Err(e) => {
-            return (false, vec![format!("Invalid regex: {}", e)], 0);
-        }
-    };
+) -> Result<usize, String> {
+    let re = Regex::new(&current_template_name).map_err(|e| format!("Invalid regex: {}", e))?;
 
-    let mut messages: Vec<String> = Vec::new();
     let mut total_matches = 0;
-    let mut success = false;
 
     // Recollect all renames
     let renames = collect_renames(folder_path, &re, new_name);
@@ -31,25 +24,20 @@ pub fn basic_scaffold(
     // Replace content in files
     for entry in WalkDir::new(folder_path).into_iter().filter_map(|e| e.ok()) {
         if !entry.file_type().is_file() {
-            // Continue if is not a file
             continue;
         }
 
         match replace_in_file_content(entry.path(), &re, new_name) {
             Ok(Some(count)) => {
                 total_matches += count;
-                if count > 0 {
-                    messages.push(format!(
-                        "Updted content in: {} ({} matchec)",
-                        entry.path().display(),
-                        count
-                    ));
-                }
             }
             Ok(None) => {}
             Err(e) => {
-                success = false;
-                messages.push(format!("Failed {}: {}", entry.path().display(), e));
+                return Err(format!(
+                    "Failed to update content in {}: {}",
+                    entry.path().display(),
+                    e
+                ));
             }
         }
     }
@@ -61,23 +49,16 @@ pub fn basic_scaffold(
             .count();
         total_matches += matches;
 
-        match fs::rename(&old_path, &new_path) {
-            Ok(_) => {
-                messages.push(format!(
-                    "Renamed {} -> {} ({} matches)",
-                    old_path.display(),
-                    new_path.display(),
-                    matches
-                ));
-            }
-            Err(error) => {
-                success = false;
-                messages.push(format!("Failed rename {}: {}", old_path.display(), error));
-            }
+        if let Err(error) = fs::rename(&old_path, &new_path) {
+            return Err(format!(
+                "Failed to rename {}: {}",
+                old_path.display(),
+                error
+            ));
         }
     }
 
-    (success, messages, total_matches)
+    Ok(total_matches)
 }
 
 pub fn scaffold_with_phases(
