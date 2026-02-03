@@ -136,6 +136,35 @@ pub fn scaffold_with_phases(
             }
         }
 
+        // For each file in the phase_folder, replace occurrences of the template name with the phase name
+        for entry in WalkDir::new(&phase_folder)
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
+            if !entry.file_type().is_file() {
+                continue;
+            }
+
+            // Regex to match the plain template name (not paths, just the name)
+            let template_name_re = Regex::new(&regex::escape(current_template_name))
+                .map_err(|e| format!("Invalid regex for template name: {}", e))?;
+
+            let replacement = phase.to_string();
+
+            match replace_in_file_content(entry.path(), &template_name_re, &replacement) {
+                Ok(Some(count)) => total_matches += count,
+                Ok(None) => {}
+                Err(e) => {
+                    return Err(format!(
+                        "Failed to replace template name '{}' in '{}': {}",
+                        current_template_name,
+                        entry.path().display(),
+                        e
+                    ));
+                }
+            }
+        }
+
         // Move the phase folder to project folder
         move_folder(&phase_folder, &project_folder.join(phase))
             .map_err(|e| format!("Failed to move phase folder '{}': {}", phase, e))?;
