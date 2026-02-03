@@ -1,39 +1,54 @@
-# byaas-project
+# BYAAS Project
 
-A modern desktop application built with [Tauri 2.0](https://tauri.app/) and [React 19](https://react.dev/), combining web technologies with native performance.
+**B**uild **Y**our **A**utomation **A**nywhere **S**caffold - A desktop application for generating best-practice Automation Anywhere scaffold templates.
+
+<p align="center">
+  <img src="./src/assets/application-logo.png" alt="NetApp Logo">
+</p>
 
 ## 🚀 Overview
 
-**byaas-project** is a cross-platform desktop application that leverages the power of React for the frontend and Rust for the backend through the Tauri framework. This architecture provides the best of both worlds: modern web development workflows with native performance and platform integration.
+**BYAAS Project** is a cross-platform desktop application built with [Tauri 2.0](https://tauri.app/) and [React 19](https://react.dev/). It automates the generation of best-practice scaffold templates for Automation Anywhere, producing `.zip` files ready to import into your Control Room.
 
 ### Key Features
 
+- **Template Generation**: Create Automation Anywhere project templates with customizable phases
+- **Phase Management**: Add multiple project phases with automatic folder structure
+- **Customer Profiles**: Pre-configured templates for different customers (Keralty, General)
+- **Auto-Updater**: Built-in update system with progress notifications
 - **Cross-platform**: Windows, macOS, and Linux support
-- **Modern Stack**: React 19 with Vite 7, Rust backend
-- **Fast Development**: Hot reload for both frontend and backend
-- **Native Integration**: File system, system APIs, and platform-specific features
-- **Small Bundle Size**: Optimized builds with minimal overhead
+- **Modern UI**: Clean interface with Tailwind CSS and toast notifications
 
 ## 📁 Project Structure
 
 ```
 byaas-project/
-├── src/                    # React frontend
-│   ├── main.jsx           # React entry point
-│   ├── App.jsx            # Main application component
-│   ├── App.css            # Styling with dark mode support
-│   └── assets/            # Static assets
-├── src-tauri/             # Rust backend
+├── src/                          # React frontend
+│   ├── components/              # Main components
+│   │   ├── scaffoldForm.jsx    # Template generation form
+│   │   └── splashScreen.jsx    # App splash screen
+│   ├── shared/                 # Shared components
+│   │   ├── ui/                 # UI components (input, buttons, etc.)
+│   │   └── addPhase.jsx        # Phase addition component
+│   ├── services/               # Frontend services
+│   │   └── updater.js          # Auto-update logic
+│   ├── main.jsx               # React entry point
+│   ├── App.jsx                # Main application component
+│   └── assets/images/         # Static assets
+├── src-tauri/                  # Rust backend
 │   ├── src/
-│   │   ├── main.rs        # Application entry point
-│   │   └── lib.rs         # Core logic and Tauri commands
-│   ├── Cargo.toml         # Rust dependencies
-│   ├── tauri.conf.json    # Tauri configuration
-│   └── icons/             # Application icons
-├── public/                # Static public assets
-├── package.json           # Frontend dependencies
-├── vite.config.js         # Vite configuration
-└── AGENTS.md              # Development guidelines
+│   │   ├── commands/           # Tauri command handlers
+│   │   ├── domain/             # Domain types and constants
+│   │   ├── infra/              # Infrastructure (filesystem, zip, etc.)
+│   │   ├── services/           # Business logic
+│   │   ├── main.rs            # Application entry point
+│   │   └── lib.rs             # Core logic and command registration
+│   ├── Cargo.toml            # Rust dependencies
+│   └── tauri.conf.json       # Tauri configuration
+├── public/                     # Static public assets
+├── package.json               # Frontend dependencies
+├── vite.config.js             # Vite configuration
+└── AGENTS.md                  # Development guidelines
 ```
 
 ## 🛠️ Technology Stack
@@ -41,17 +56,21 @@ byaas-project/
 ### Frontend
 - **React 19.1.0** - Modern UI framework
 - **Vite 7.0.4** - Fast build tool and dev server
+- **Tailwind CSS 4.x** - Utility-first CSS framework
+- **Sonner 2.x** - Toast notification library
 - **@tauri-apps/api 2.x** - Tauri frontend API
-- **CSS3** - Styling with dark mode support
 
 ### Backend
 - **Rust** - Systems programming language
 - **Tauri 2.x** - Desktop app framework
-- **Serde 1.x** - JSON serialization
-- **tauri-plugin-opener** - URL opening functionality
+- **reqwest** - HTTP client for downloading templates
+- **zip** - Archive handling
+- **walkdir** - Directory traversal
+- **regex** - Pattern matching for template replacement
 
 ### Development Tools
 - **Bun** - Fast package manager
+- **Cargo** - Rust package manager
 - **VS Code** - Recommended IDE with Tauri and Rust extensions
 
 ## 📋 Prerequisites
@@ -87,7 +106,7 @@ bun install
 bun run tauri dev
 ```
 
-This starts the development server with hot reload for both frontend and backend changes.
+This starts the development server with hot reload for frontend and backend changes.
 
 ### 3. Build for Production
 ```bash
@@ -100,93 +119,91 @@ Creates optimized desktop binaries for all platforms.
 
 ### Development
 ```bash
-bun run dev                    # Start Vite dev server (frontend only)
+bun run dev                    # Start Vite dev server (frontend only, port 1420)
 bun run tauri dev             # Full Tauri development with hot reload
+bun run tauri dev --debug     # Tauri dev with additional logging
 ```
 
 ### Production
 ```bash
 bun run build                  # Build frontend for production
 bun run tauri build           # Build complete desktop application
-bun run preview               # Preview production build
+bun run preview               # Preview production build locally
+```
+
+### Testing
+```bash
+# Rust backend tests
+cargo test                     # Run all Rust tests
+cargo test test_name          # Run single test by name
+cargo test module_name::      # Run tests in specific module
+
+# Formatting and linting
+cargo fmt                      # Format Rust code
+cargo clippy                   # Run Rust linter
 ```
 
 ### Package Management
 ```bash
 bun install                   # Install all dependencies
 bun add <package>             # Add new frontend dependency
-bun add <package> -D          # Add dev dependency
+bun add -d <package>          # Add dev dependency
 ```
 
-## 🏗️ Architecture
+## 🎨 Features
 
-### Frontend-Backend Communication
+### Template Generation
 
-The application uses Tauri's command system for secure frontend-backend communication:
+1. **Enter Project Name**: Specify the name for your Automation Anywhere project
+2. **Select Customer**: Choose between predefined customer profiles (Keralty, General Customer)
+3. **Add Phases**: Optionally add project phases (e.g., "Phase1", "Phase2")
+4. **Generate**: Creates a `.zip` file in your Downloads folder with:
+   - Proper folder structure
+   - Main taskbot files
+   - Environment deployment templates
+   - User story templates
+   - Configuration files
+   - Function templates
 
-```javascript
-// Frontend (React)
-import { invoke } from "@tauri-apps/api/core";
+### Auto-Updater
 
-const result = await invoke("greet", { name: "World" });
+The application automatically checks for updates on startup:
+- Displays update notifications when available
+- Downloads and installs updates with progress tracking
+- Auto-restarts after installation
+
+### Example Output
+
+Generated template structure:
 ```
-
-```rust
-// Backend (Rust)
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-```
-
-### Component Pattern
-
-```jsx
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
-
-function Component() {
-  const [state, setState] = useState("");
-
-  async function handleAction() {
-    const result = await invoke("command_name", { param: state });
-    // Handle result
-  }
-
-  return <div>{/* JSX content */}</div>;
-}
+Automation Anywhere/Bots/
+├── {ProjectName}/
+│   ├── {Phase}/
+│   │   ├── Main_{Phase}
+│   │   ├── Historias/
+│   │   │   ├── HU00_DespliegueAmbiente
+│   │   │   └── HUXX_Plantilla
+│   │   ├── Funciones/
+│   │   │   └── 00_FuncionPlantilla
+│   │   └── Parametros/
+│   │       └── Configuracion.xlsx
 ```
 
 ## ⚙️ Configuration
 
 ### Tauri Configuration (`src-tauri/tauri.conf.json`)
 
-- **Window Size**: 800x600 pixels
+- **Window Size**: Responsive design
 - **Development Port**: 1420 (fixed)
 - **Bundle Targets**: All platforms
-- **Security**: CSP null (development mode only)
+- **Updater**: Enabled with GitHub releases integration
 
 ### Vite Configuration (`vite.config.js`)
 
 - **Port**: 1420 (strict, required by Tauri)
-- **HMR**: Enabled on port 1421
+- **HMR Port**: 1421
+- **Asset Alias**: `@images` → `src/assets/images`
 - **Ignored**: `src-tauri` directory
-
-## 🎨 Features
-
-### Current Functionality
-
-- **Greeting System**: Interactive form demonstrating frontend-backend communication
-- **Template Landing Page**: Educational links to Tauri, Vite, and React documentation
-- **Cross-platform Support**: Native builds for Windows, macOS, and Linux
-- **Dark Mode Ready**: CSS structure supports theme switching
-
-### Extending the Application
-
-1. **Add New Commands**: Define in `src-tauri/src/lib.rs`
-2. **Create Components**: Add to `src/` directory
-3. **Styling**: Use CSS modules or scoped classes
-4. **State Management**: Implement with React hooks or external libraries
 
 ## 🔧 Development Workflow
 
@@ -196,11 +213,17 @@ function Component() {
 2. **Backend Changes**: Restart dev server after Rust modifications
 3. **Testing**: Use browser dev tools for frontend, console for backend
 
+### Code Style
+
+- **Frontend**: Functional React components, Tailwind CSS, Sonner toasts
+- **Backend**: Modular architecture with commands, domain, infra, and services layers
+- See [AGENTS.md](./AGENTS.md) for detailed coding guidelines
+
 ### Debugging
 
-- **Frontend**: Browser developer tools
+- **Frontend**: Browser developer tools, React DevTools
 - **Backend**: Console output and `println!` statements
-- **Tauri**: `bun run tauri dev --debug` for additional logging
+- **Tauri**: `bun run tauri dev --debug` for verbose logging
 
 ## 📚 Documentation
 
@@ -213,7 +236,7 @@ function Component() {
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
+3. Commit your changes using [better-commits](https://github.com/Everduin94/better-commits) conventions
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
@@ -229,4 +252,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ using Tauri + React**
+**Built with ❤️ using Tauri + React + Rust**
