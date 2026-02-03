@@ -1,4 +1,4 @@
-use std::{env::temp_dir, fs};
+use std::{env::temp_dir, fs, path::Path};
 
 use directories::UserDirs;
 
@@ -58,7 +58,7 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
         }
     }
 
-    // zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
-    // fs::remove_dir_all(&temp_folder).map_err(|e| e.to_string())?;
+    zipper::zipfile(&temp_folder, Path::new(&final_file))?; // Final result
+    fs::remove_dir_all(&temp_folder).map_err(|e| e.to_string())?;
     Ok(ScaffoldResponse::success(&final_file, &total_matches))
 }
