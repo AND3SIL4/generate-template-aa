@@ -4,7 +4,9 @@ use regex::Regex;
 use walkdir::WalkDir;
 
 use crate::domain::constants::{AUTOMATION_PATH, BOT_PATH};
+use crate::domain::implementations::FileEntry;
 use crate::infra::filesystem::{copy_folder_content, move_folder};
+use crate::infra::json::process_manifest;
 use crate::infra::{filesystem::collect_renames, replacer::replace_in_file_content};
 
 pub fn basic_scaffold(
@@ -96,6 +98,8 @@ pub fn scaffold_with_phases(
     fs::create_dir_all(&project_folder)
         .map_err(|e| format!("Failed to create project folder: {}", e))?;
 
+    let mut entries_to_manifest: Vec<FileEntry> = vec![];
+
     for phase in phases {
         let phase_folder = temp_path.join(phase);
         let re = Regex::new(&current_template_name)
@@ -154,11 +158,84 @@ pub fn scaffold_with_phases(
         // Move the phase folder to project folder
         move_folder(&phase_folder, &project_folder.join(phase))
             .map_err(|e| format!("Failed to move phase folder '{}': {}", phase, e))?;
+
+        // Add the FileEntry to update the json
+        // 1. Create the main reference
+        entries_to_manifest.push(FileEntry::new(
+            format!(
+                "Automation Anywhere\\Bots\\{}\\{}\\Main_{}",
+                &project_name, &phase, &phase
+            ),
+            "application/vnd.aa.taskbot".to_string(),
+            vec![
+                format!(
+                    "Automation Anywhere\\Bots\\{}\\{}\\Historias\\HU00_DespliegueAmbiente",
+                    &project_name, &phase
+                ),
+                "Automation Anywhere\\Bots\\Globales\\Config\\EscribirLog".to_string(),
+            ],
+            "Master de ejemplo de asistente digital".to_string(),
+        ));
+
+        // 2. Create the environment deploy file
+        entries_to_manifest.push(FileEntry::new(
+            format!("Automation Anywhere\\Bots\\{}\\{}\\Historias\\HU00_DespliegueAmbiente", &project_name, &phase), "application/vnd.aa.taskbot".to_string(), vec![
+                 "Automation Anywhere\\Bots\\Globales\\Config\\EscribirLog".to_string(),
+                "Automation Anywhere\\Bots\\Globales\\Config\\CargarArchivoParametros".to_string()
+            ], "Historia de Usuario Inicial de Despliegue Ambiente, se encarga de validar que todo este OK para para ejecución del asistente digital".to_string()));
+
+        // 3. Create the hu template
+        entries_to_manifest.push(FileEntry::new(
+            format!(
+                "Automation Anywhere\\Bots\\{}\\{}\\Historias\\HUXX_Plantilla",
+                &project_name, &phase
+            ),
+            "application/vnd.aa.taskbot".to_string(),
+            vec![
+                format!(
+                    "Automation Anywhere\\Bots\\{}\\{}\\Historias\\HU00_DespliegueAmbiente",
+                    &project_name, &phase
+                ),
+                "Automation Anywhere\\Bots\\Globales\\Config\\EscribirLog".to_string(),
+            ],
+            "Plantilla de Historias de Usuario".to_string(),
+        ));
+        // 4. Create the configuration file
+        entries_to_manifest.push(FileEntry::new(
+            format!(
+                "Automation Anywhere\\Bots\\{}\\{}\\Parametros\\Configuracion.xlsx",
+                &project_name, &phase
+            ),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet".to_string(),
+            Vec::new(),
+            String::new(),
+        ));
+        // 5. Create the template function
+        entries_to_manifest.push(FileEntry::new(
+            format!(
+                "Automation Anywhere\\Bots\\{}\\{}\\Funciones\\00_FuncionPlantilla",
+                &project_name, &phase
+            ),
+            "application/vnd.aa.taskbot".to_string(),
+            vec![
+                format!(
+                    "Automation Anywhere\\Bots\\{}\\{}\\Historias\\HU00_DespliegueAmbiente",
+                    &project_name, &phase
+                ),
+                "Automation Anywhere\\Bots\\Globales\\Config\\EscribirLog".to_string(),
+            ],
+            "Función empieza en verbo infinitivo, en español sin acentos".to_string(),
+        ));
     }
 
     // Delete the template folder after creating all phases
     fs::remove_dir_all(temp_path.join(current_template_name))
         .map_err(|e| format!("Failed to remove template folder: {}", e))?;
+
+    // Update the manifest json file
+    let mut manifest_path = folder_path.to_path_buf();
+    manifest_path.push("manifest.json");
+    process_manifest(&manifest_path, &entries_to_manifest)?;
 
     Ok(total_matches)
 }

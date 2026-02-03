@@ -1,4 +1,4 @@
-use std::{env::temp_dir, fs, path::Path};
+use std::{env::temp_dir, fs};
 
 use directories::UserDirs;
 
@@ -29,7 +29,7 @@ pub fn generate_template(scaffold_data: ScaffoldData) -> Result<ScaffoldResponse
 
     // Backend and scaffold generation logic
     // 1. Validate if the project has phases
-    let mut total_matches = 0;
+    let total_matches;
     if scaffold_data.phases.is_empty() {
         // Call generate basic scaffold
         let (success, _, tmp_total_matches) = generate_scaffold::basic_scaffold(
