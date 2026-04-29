@@ -54,6 +54,7 @@ byaas-project/
 ## 🛠️ Technology Stack
 
 ### Frontend
+
 - **React 19.1.0** - Modern UI framework
 - **Vite 7.0.4** - Fast build tool and dev server
 - **Tailwind CSS 4.x** - Utility-first CSS framework
@@ -61,6 +62,7 @@ byaas-project/
 - **@tauri-apps/api 2.x** - Tauri frontend API
 
 ### Backend
+
 - **Rust** - Systems programming language
 - **Tauri 2.x** - Desktop app framework
 - **reqwest** - HTTP client for downloading templates
@@ -69,6 +71,7 @@ byaas-project/
 - **regex** - Pattern matching for template replacement
 
 ### Development Tools
+
 - **Bun** - Fast package manager
 - **Cargo** - Rust package manager
 - **VS Code** - Recommended IDE with Tauri and Rust extensions
@@ -78,11 +81,13 @@ byaas-project/
 Before running this project, ensure you have the following installed:
 
 1. **Bun** - Package manager
+
    ```bash
    curl -fsSL https://bun.sh/install | bash
    ```
 
 2. **Rust** - Backend development
+
    ```bash
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    ```
@@ -95,6 +100,7 @@ Before running this project, ensure you have the following installed:
 ## 🚀 Quick Start
 
 ### 1. Clone and Install
+
 ```bash
 git clone <repository-url>
 cd byaas-project
@@ -102,6 +108,7 @@ bun install
 ```
 
 ### 2. Development Mode
+
 ```bash
 bun run tauri dev
 ```
@@ -109,6 +116,7 @@ bun run tauri dev
 This starts the development server with hot reload for frontend and backend changes.
 
 ### 3. Build for Production
+
 ```bash
 bun run tauri build
 ```
@@ -118,6 +126,7 @@ Creates optimized desktop binaries for all platforms.
 ## 📖 Available Commands
 
 ### Development
+
 ```bash
 bun run dev                    # Start Vite dev server (frontend only, port 1420)
 bun run tauri dev             # Full Tauri development with hot reload
@@ -125,6 +134,7 @@ bun run tauri dev --debug     # Tauri dev with additional logging
 ```
 
 ### Production
+
 ```bash
 bun run build                  # Build frontend for production
 bun run tauri build           # Build complete desktop application
@@ -132,6 +142,7 @@ bun run preview               # Preview production build locally
 ```
 
 ### Testing
+
 ```bash
 # Rust backend tests
 cargo test                     # Run all Rust tests
@@ -144,6 +155,7 @@ cargo clippy                   # Run Rust linter
 ```
 
 ### Package Management
+
 ```bash
 bun install                   # Install all dependencies
 bun add <package>             # Add new frontend dependency
@@ -168,6 +180,7 @@ bun add -d <package>          # Add dev dependency
 ### Auto-Updater
 
 The application automatically checks for updates on startup:
+
 - Displays update notifications when available
 - Downloads and installs updates with progress tracking
 - Auto-restarts after installation
@@ -175,6 +188,7 @@ The application automatically checks for updates on startup:
 ### Example Output
 
 Generated template structure:
+
 ```
 Automation Anywhere/Bots/
 ├── {ProjectName}/
@@ -252,4 +266,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+## Common Frontend Architecture
+
+````txt
+components/
+├── ui/              # Componentes base (botones, inputs, etc.)
+├── layout/          # Estructura de la app
+├── common/          # Componentes reutilizables más complejos
+├── feedback/        # Estados visuales (loading, error, empty)
+├── forms/           # Componentes relacionados a formularios
+├── data-display/    # Mostrar información (tablas, cards, listas)
+├── navigation/      # Navegación (menus, sidebar, navbar)
+└── modals/          # Modales / diálogos
+```
+
 **Built with ❤️ using Tauri + React + Rust**
+````
