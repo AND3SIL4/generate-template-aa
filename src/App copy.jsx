@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import "./App.css";
-import ScaffoldForm from "./components/scaffoldForm";
-import SplashScreen from "./components/splashScreen";
-import { checkUpdate, downloadAndInstall, forceRelaunch } from "./services/updater";
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import './App.css';
+import ScaffoldForm from './components/scaffoldForm';
+import SplashScreen from './components/splashScreen';
+import {
+  checkUpdate,
+  downloadAndInstall,
+  forceRelaunch,
+} from './services/updater';
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -14,8 +18,8 @@ function App() {
   useEffect(() => {
     async function initCheck() {
       const update = await checkUpdate((error) => {
-        toast.error("Could not check for updates", {
-          description: error?.message || "Please try again later",
+        toast.error('Could not check for updates', {
+          description: error?.message || 'Please try again later',
         });
       });
 
@@ -23,10 +27,10 @@ function App() {
 
       if (update) {
         toast.info(`New version available: v${update.version}`, {
-          id: "update-available",
+          id: 'update-available',
           duration: Infinity,
           action: {
-            label: "Download and install",
+            label: 'Download and install',
             onClick: startDownload,
           },
         });
@@ -37,11 +41,11 @@ function App() {
   }, []);
 
   const startDownload = () => {
-    toast.dismiss("update-available");
+    toast.dismiss('update-available');
     setIsDownloading(true);
     setProgress(0);
 
-    const toastId = toast.loading("Downloading update... 0%");
+    const toastId = toast.loading('Downloading update... 0%');
 
     downloadAndInstall(
       // onProgress
@@ -51,19 +55,19 @@ function App() {
       },
       // onComplete
       () => {
-        toast.success("Update installed", {
-          description: "Restarting in 3 seconds...",
+        toast.success('Update installed', {
+          description: 'Restarting in 3 seconds...',
           duration: 4000,
         });
         setTimeout(forceRelaunch, 3000);
       },
       // onError
       (error) => {
-        toast.error("Update failed", {
-          description: error?.message || "Please try again later",
+        toast.error('Update failed', {
+          description: error?.message || 'Please try again later',
         });
         setIsDownloading(false);
-      }
+      },
     );
   };
 
@@ -73,28 +77,32 @@ function App() {
 
   if (isDownloading) {
     return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "1rem"
-      }}>
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
         <h2>Installing update</h2>
-        <div style={{
-          width: "320px",
-          height: "24px",
-          background: "#333",
-          borderRadius: "12px",
-          overflow: "hidden",
-        }}>
+        <div
+          style={{
+            width: '320px',
+            height: '24px',
+            background: '#333',
+            borderRadius: '12px',
+            overflow: 'hidden',
+          }}
+        >
           <div
             style={{
               width: `${progress}%`,
-              height: "100%",
-              background: "#0ea5e9",
-              transition: "width 0.25s ease-out",
+              height: '100%',
+              background: '#0ea5e9',
+              transition: 'width 0.25s ease-out',
             }}
           />
         </div>

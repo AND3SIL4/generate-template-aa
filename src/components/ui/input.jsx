@@ -1,11 +1,11 @@
-function Input({ type = "text", placeholder, onChange, value }) {
-    return (
-        <input
-            value={value}
-            type={type}
-            placeholder={placeholder}
-            onChange={onChange}
-            className="w-full
+function Input({ type = 'text', placeholder, onChange, value }) {
+  return (
+    <input
+      value={value}
+      type={type}
+      placeholder={placeholder}
+      onChange={onChange}
+      className="w-full
                 appearance-none
                 bg-transparent
                 border-0
@@ -18,8 +18,8 @@ function Input({ type = "text", placeholder, onChange, value }) {
                 duration-200
                 p-2
             "
-        />
-    );
+    />
+  );
 }
 
 export default Input;

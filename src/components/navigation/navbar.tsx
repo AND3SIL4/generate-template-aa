@@ -1,0 +1,31 @@
+import Logo from '@images/logo-byaas.png';
+import ThemeSwticher from '../common/themeSwitcher';
+import { getTheme } from '@/utils/themes';
+import { useState } from 'react';
+import { ThemeVariant } from '@/utils/types';
+
+const Navbar = () => {
+  const [theme, setTheme] = useState<ThemeVariant>('cyber');
+  const t = getTheme(theme);
+
+  return (
+    <nav className={`flex items-center justify-between p-3 ${t.bgGlow1}`}>
+      {/* Left side of the navbar */}
+      <div className="flex items-center gap-4">
+        <img src={Logo} alt="Logo project Byaas" className="w-20 h-20" />
+        <div>
+          <h1>AA Template Genertor</h1>
+          <p>Create the best practice Automation Anywhere templates</p>
+        </div>
+      </div>
+      {/* Navbar rigth side */}
+      <div className="flex justify-between items-center gap-2">
+        <ThemeSwticher />
+        <button>Documentation</button>
+        <button>Config</button>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

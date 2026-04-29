@@ -1,79 +1,78 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-    /* Primary colors - Azul suave y profesional */
-    --color-primary-50: #f0f9ff;
-    /* Muy claro para backgrounds */
-    --color-primary-100: #e0f2fe;
-    --color-primary-200: #bae6fd;
-    --color-primary-300: #7dd3fc;
-    --color-primary-400: #38bdf8;
-    --color-primary-500: #0ea5e9;
-    /* Sky blue - menos intenso que el azul puro */
-    --color-primary-600: #0284c7;
-    /* Color principal - sky-600 */
-    --color-primary-700: #0369a1;
-    --color-primary-800: #075985;
-    --color-primary-900: #0c4a6e;
-    --color-primary: #0284c7;
+  /* Primary colors - Azul suave y profesional */
+  --color-primary-50: #f0f9ff;
+  /* Muy claro para backgrounds */
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  /* Sky blue - menos intenso que el azul puro */
+  --color-primary-600: #0284c7;
+  /* Color principal - sky-600 */
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  --color-primary: #0284c7;
 
-    /* Secondary colors - Verde-Teal (complementa al azul) */
-    --color-secondary-50: #f0fdfa;
-    --color-secondary-100: #ccfbf1;
-    --color-secondary-200: #99f6e4;
-    --color-secondary-300: #5eead4;
-    --color-secondary-400: #2dd4bf;
-    --color-secondary-500: #14b8a6;
-    --color-secondary-600: #0d9488;
-    /* Teal-600 - color secundario principal */
-    --color-secondary-700: #0f766e;
-    --color-secondary-800: #115e59;
-    --color-secondary-900: #134e4a;
-    --color-secondary: #0d9488;
+  /* Secondary colors - Verde-Teal (complementa al azul) */
+  --color-secondary-50: #f0fdfa;
+  --color-secondary-100: #ccfbf1;
+  --color-secondary-200: #99f6e4;
+  --color-secondary-300: #5eead4;
+  --color-secondary-400: #2dd4bf;
+  --color-secondary-500: #14b8a6;
+  --color-secondary-600: #0d9488;
+  /* Teal-600 - color secundario principal */
+  --color-secondary-700: #0f766e;
+  --color-secondary-800: #115e59;
+  --color-secondary-900: #134e4a;
+  --color-secondary: #0d9488;
 
-    /* Accent - Verde más vivo para highlights */
-    --color-accent-500: #10b981;
-    /* Emerald-500 */
-    --color-accent-600: #059669;
-    /* Emerald-600 */
-    --color-accent: #10b981;
+  /* Accent - Verde más vivo para highlights */
+  --color-accent-500: #10b981;
+  /* Emerald-500 */
+  --color-accent-600: #059669;
+  /* Emerald-600 */
+  --color-accent: #10b981;
 
-    /* Background colors - Neutros cálidos (no grises fríos) */
-    /* Stone-50 - más cálido que slate */
-    --color-background-card: #ffffff;
-    --color-background-hover: #f5f5f4;
-    /* Stone-100 */
-    --color-background-soft: #f0fdfa;
-    /* Teal-50 - para secciones destacadas */
+  /* Background colors - Neutros cálidos (no grises fríos) */
+  /* Stone-50 - más cálido que slate */
+  --color-background-card: #ffffff;
+  --color-background-hover: #f5f5f4;
+  /* Stone-100 */
+  --color-background-soft: #f0fdfa;
+  /* Teal-50 - para secciones destacadas */
 
-    /* Text colors - Alto contraste pero no negro puro */
-    --color-text-primary: #1c1917;
-    /* Stone-900 - negro cálido */
-    --color-text-secondary: #57534e;
-    /* Stone-600 - gris medio con calidez */
-    --color-muted: #78716c;
-    /* Stone-500 - para textos deshabilitados */
-    --color-text-light: #a8a29e;
-    /* Stone-400 - muy suave */
+  /* Text colors - Alto contraste pero no negro puro */
+  --color-text-primary: #1c1917;
+  /* Stone-900 - negro cálido */
+  --color-text-secondary: #57534e;
+  /* Stone-600 - gris medio con calidez */
+  --color-muted: #78716c;
+  /* Stone-500 - para textos deshabilitados */
+  --color-text-light: #a8a29e;
+  /* Stone-400 - muy suave */
 
-    /* Borders - Sutiles pero visibles */
-    --color-border: #e7e5e4;
-    /* Stone-200 */
-    --color-border-strong: #d6d3d1;
-    /* Stone-300 */
+  /* Borders - Sutiles pero visibles */
+  --color-border: #e7e5e4;
+  /* Stone-200 */
+  --color-border-strong: #d6d3d1;
+  /* Stone-300 */
 
-    /* Status colors - Para feedback */
-    --color-success: #10b981;
-    /* Emerald-500 */
-    --color-warning: #f59e0b;
-    /* Amber-500 */
-    --color-error: #ef4444;
-    /* Red-500 */
-    --color-info: #0ea5e9;
-    /* Sky-500 */
+  /* Status colors - Para feedback */
+  --color-success: #10b981;
+  /* Emerald-500 */
+  --color-warning: #f59e0b;
+  /* Amber-500 */
+  --color-error: #ef4444;
+  /* Red-500 */
+  --color-info: #0ea5e9;
+  /* Sky-500 */
 }
 
-
 :root {
-    background: #fafaf9;
+  background: #fafaf9;
 }
