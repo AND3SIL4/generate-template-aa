@@ -1,13 +1,9 @@
 import { ButtonType } from 'src/utils/types';
 
-const Button = ({ children, className, size, ...props }: ButtonType) => {
+const Button = ({ className, children, size, ...props }: ButtonType) => {
+  const extraClass = className ? className : '';
   return (
-    <button
-      className={`
-        cursor-pointer flex justify-between gap-1
-        ${className ? className : ''}`}
-      {...props}
-    >
+    <button className={`flex content-between gap-1 ${extraClass}`} {...props}>
       {children}
     </button>
   );

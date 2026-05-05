@@ -3,9 +3,12 @@ import ThemeSwticher from '../common/themeSwitcher';
 import { getTheme } from '@/utils/themes';
 import { useState } from 'react';
 import { ThemeVariant } from '@/utils/types';
+import Button from '../ui/button';
+import DocsIcon from '@icons/docsIcons';
+import ConfigIcon from '@icons/configIcon';
 
 const Navbar = () => {
-  const [theme, setTheme] = useState<ThemeVariant>('cyber');
+  const [theme, setTheme] = useState<ThemeVariant>('gold');
   const t = getTheme(theme);
 
   return (
@@ -14,15 +17,19 @@ const Navbar = () => {
       <div className="flex items-center gap-4">
         <img src={Logo} alt="Logo project Byaas" className="w-20 h-20" />
         <div>
-          <h1>AA Template Genertor</h1>
+          <h1 className="text-lg font-bold">AA Template Genertor</h1>
           <p>Create the best practice Automation Anywhere templates</p>
         </div>
       </div>
       {/* Navbar rigth side */}
       <div className="flex justify-between items-center gap-2">
         <ThemeSwticher />
-        <button>Documentation</button>
-        <button>Config</button>
+        <Button size="md">
+          <DocsIcon /> Documentation
+        </Button>
+        <Button size="md">
+          <ConfigIcon />
+        </Button>
       </div>
     </nav>
   );
