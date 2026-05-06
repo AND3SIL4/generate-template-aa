@@ -3,9 +3,11 @@ import ThemeSwticher from '../common/themeSwitcher';
 import { getTheme } from '@/utils/themes';
 import { useState } from 'react';
 import { ThemeVariant } from '@/utils/types';
-import Button from '../ui/button';
 import DocsIcon from '@icons/docsIcons';
 import ConfigIcon from '@icons/configIcon';
+import { Button } from '@images/components/ui/button';
+import { ColorPaletteIcon } from '@icons/colorPaletteIcon';
+import { DropdownMenu } from '@images/components/ui/dropdown-menu';
 
 const Navbar = () => {
   const [theme, setTheme] = useState<ThemeVariant>('gold');
@@ -23,12 +25,12 @@ const Navbar = () => {
       </div>
       {/* Navbar rigth side */}
       <div className="flex justify-between items-center gap-2">
-        <ThemeSwticher />
-        <Button size="md">
-          <DocsIcon /> Documentation
+        <ThemeSwticher/>
+        <Button variant={"outline"} className="cursor-pointer">
+          <DocsIcon/> Documentation
         </Button>
-        <Button size="md">
-          <ConfigIcon />
+        <Button variant={"outline"} className="cursor-pointer">
+          <ConfigIcon/>
         </Button>
       </div>
     </nav>
