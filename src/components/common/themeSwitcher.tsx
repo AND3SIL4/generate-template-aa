@@ -1,15 +1,23 @@
 import { ColorPaletteIcon } from '@icons/colorPaletteIcon';
 import { Button } from '@images/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@images/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@images/components/ui/dropdown-menu';
 import { useState } from 'react';
 
 const ThemeSwticher = () => {
-  const [position, setPosition] = useState("top");
+  const [position, setPosition] = useState('top');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
-          <ColorPaletteIcon/> Theme
+          <ColorPaletteIcon /> Theme
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
@@ -23,7 +31,7 @@ const ThemeSwticher = () => {
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 };
 
 export default ThemeSwticher;
