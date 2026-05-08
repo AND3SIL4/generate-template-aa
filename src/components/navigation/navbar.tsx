@@ -8,13 +8,14 @@ import ConfigIcon from '@icons/configIcon';
 import { Button } from '@images/components/ui/button';
 import { ColorPaletteIcon } from '@icons/colorPaletteIcon';
 import { DropdownMenu } from '@images/components/ui/dropdown-menu';
+import { DocSection } from '../common/docsSection';
 
 const Navbar = () => {
   const [theme, setTheme] = useState<ThemeVariant>('gold');
   const t = getTheme(theme);
 
   return (
-    <nav className={`flex items-center justify-between p-3 ${t.bgGlow1}`}>
+    <nav className="flex items-center justify-between p-3">
       {/* Left side of the navbar */}
       <div className="flex items-center gap-4">
         <img src={Logo} alt="Logo project Byaas" className="w-20 h-20" />
@@ -25,12 +26,10 @@ const Navbar = () => {
       </div>
       {/* Navbar rigth side */}
       <div className="flex justify-between items-center gap-2">
-        <ThemeSwticher/>
-        <Button variant={"outline"} className="cursor-pointer">
-          <DocsIcon/> Documentation
-        </Button>
-        <Button variant={"outline"} className="cursor-pointer">
-          <ConfigIcon/>
+        <ThemeSwticher /> {/* Item to change the application theme */}
+        <DocSection /> {/*Documentation item */}
+        <Button variant={'outline'} className="cursor-pointer">
+          <ConfigIcon />
         </Button>
       </div>
     </nav>
