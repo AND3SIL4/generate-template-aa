@@ -1,16 +1,8 @@
-import './App.css';
-import Footer from './components/common/footer';
-import MainForm from './components/common/mainForm';
-import Navbar from './components/navigation/navbar';
+import "./styles/global.css"
 
 const App = () => {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <MainForm />
-      <Footer />
-    </div>
-  );
-};
+  return <h1 className="">This application will be awesome</h1>
+}
+
 
 export default App;
