@@ -21,7 +21,6 @@ const menuItems: { id: View; label: string, icon: JSX.Element }[] = [
   { id: "history", label: "Historical", icon: <DownloadIcon /> }
 ]
 
-
 const Navbar = ({ activeView, setActiveView }: NavbarProps) => {
   return (
     <header className="sticky top-0 z-1 bg-background/85 backdrop-blur-md">
@@ -55,8 +54,10 @@ const Navbar = ({ activeView, setActiveView }: NavbarProps) => {
           })}
         </nav>
         {/* Status pill */}
-        <div className="flex">
-          Something
+        <div className="hidden items-center gap-2 rounded-full border border-border
+        bg-card px-3 py-1.5 text-xs text-muted-foreground md:flex">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
+          Active
         </div>
       </div>
     </header>
