@@ -26,7 +26,7 @@ const Footer = () => {
 
   return (
     <footer
-      className="w-full border-t border-border bg-muted px-20 py-4 flex
+      className="w-full border-t border-border bg-muted px-20 py-2.5 flex
     flex-col sm:flex-row justify-around items-center gap-2 text-xs"
     >
       <p className="text-muted-foreground text-center sm:text-left flex flex-wrap items-center gap-x-1">
