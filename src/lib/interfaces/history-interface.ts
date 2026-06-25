@@ -3,5 +3,4 @@ export interface HistoryItem {
   projectName: string;
   customer: string;
   phases: number;
-  createdAt: Date;
 }
