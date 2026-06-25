@@ -26,7 +26,7 @@ const TemplateHistory = () => {
   });
 
   const redownload = () => {
-    toast.success("Template ready to use", {
+    toast.info("Template ready to use", {
       icon: null,
       description: (
         <div className="flex items-center gap-1">
