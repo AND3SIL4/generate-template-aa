@@ -6,7 +6,7 @@ import Documentation from "@/components/documentation";
 import TemplateHistory from "@/components/template-history";
 
 function HomePage() {
-  // Manage the selecte view in all the application
+  // Manage the selected view in all the application
   const [activeView, setActiveView] = useState<"generator" | "docs" | "history">("generator");
 
   return (
@@ -15,9 +15,9 @@ function HomePage() {
       <main className="flex-1 overflow-auto">
         <div className="mx-auto max-w-6xl p-4 md:p-6">
           {/* Configure and render the main components */}
-          {activeView == "generator" && <TemplateGenerator />}
-          {activeView == "docs" && <Documentation />}
-          {activeView == "history" && <TemplateHistory />}
+          {activeView === "generator" && <TemplateGenerator />}
+          {activeView === "docs" && <Documentation />}
+          {activeView === "history" && <TemplateHistory />}
         </div>
       </main>
       <Footer />
