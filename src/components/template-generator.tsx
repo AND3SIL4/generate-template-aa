@@ -1,12 +1,6 @@
 import { customers, Phase } from "@/lib/template-generation";
-import {
-  CheckCircleIcon,
-  Download,
-  Package,
-  Plus,
-  Sparkles,
-  Trash2,
-} from "lucide-react";
+import { invoke } from "@tauri-apps/api/core";
+import { Download, Package, Plus, Sparkles, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "./ui/badge";
@@ -23,37 +17,43 @@ import Label from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Separator } from "./ui/separator";
 
+interface TemplateResponse {
+  msg: string;
+  details: string;
+}
+
 const TemplateGenerator = () => {
   const [projectName, setProjectName] = useState("");
   const [customer, setCustomer] = useState("");
   const [phases, setPhases] = useState<Phase[]>([]);
 
-  const isFormValid = projectName.trim() !== "" && customer.trim() !== "";
+  const isFormValid = projectName.trim() && customer.trim();
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!isFormValid) return;
+    const idToast = "generate-template";
 
-    const outputPath = "C:/Users/%userprofile%/Downloads/";
-
-    // Retrieve a message after generate the template
-    toast.success(
-      <div className="flex gap-2 items-center">
-        <CheckCircleIcon className="size-5" />
-        Template Generated Successfully!
-      </div>,
-      {
-        icon: null,
-        description:
-          "Your template is ready to import into Control Room. Click on the button to copy the output path",
-        action: {
-          label: "Copy",
-          onClick: () => {
-            navigator.clipboard.writeText(outputPath);
-            toast.info(`Path '${outputPath}' copied to clipboard!`);
-          },
+    try {
+      toast.loading("Generating template", { id: idToast });
+      const response: TemplateResponse = await invoke("generate_template", {
+        scaffoldData: {
+          name: projectName,
+          phases: phases.map((p) => p.name),
+          customer: customer,
         },
-      },
-    );
+      });
+
+      // Retrieve a message after generate the template
+      toast.success(response.msg, {
+        id: idToast,
+        description: response.details,
+      });
+    } catch (error: any) {
+      toast.error("Something went wrong!", {
+        id: idToast,
+        description: error.message,
+      });
+    }
 
     // Clean up the form
     setProjectName("");
@@ -270,8 +270,8 @@ const TemplateGenerator = () => {
               onClick={handleGenerate}
               className="w-full gap-2 sm:w-auto"
             >
-              <Download className="h-4 w-4" />
-              Generate Template
+              {" "}
+              <Download className="h-4 w-4" /> Generate Template
             </Button>
           </div>
         </CardContent>
