@@ -78,7 +78,7 @@ const TemplateHistory = () => {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3 px-5">
+        <div className="space-y-3">
           {filteredHistory.map((item) => (
             <Card
               key={item.id}
@@ -87,7 +87,7 @@ const TemplateHistory = () => {
               <CardContent className="flex items-center gap-4 p-4">
                 <AutomationAnywhereIcon />
                 {/* Template information history */}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 space-y-2">
                   <h3 className="truncate font-semibold">{item.projectName}</h3>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                     <Badge variant="secondary">{item.customer}</Badge>
@@ -95,6 +95,13 @@ const TemplateHistory = () => {
                       {item.phases} phase{item.phases !== 1 ? "s" : ""}
                     </Badge>
                   </div>
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground/70">
+                    <Clock className="h-3 w-3" />
+                    Generated At{" "}
+                    {item.generatedAt
+                      ? new Date(item.generatedAt).toLocaleString()
+                      : "Unknown time"}
+                  </span>
                 </div>
 
                 {/* Downloading old template action */}
