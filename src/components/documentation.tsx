@@ -1,8 +1,7 @@
 import { bestPracticesContent } from "@/lib/docs/best-practices";
 import { technicalDocsContent } from "@/lib/docs/techical-docs";
 import { userGuideContent } from "@/lib/docs/userguide-docs";
-import { Book, ChevronRight, Code, Lightbulb, Search } from "lucide-react";
-import { useState } from "react";
+import { Book, ChevronRight, Code, Lightbulb } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -17,13 +16,10 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 function Documentation() {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       {/* Header */}

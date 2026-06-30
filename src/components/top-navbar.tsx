@@ -24,15 +24,19 @@ const Navbar = ({ activeView, setActiveView }: NavbarProps) => {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 md:px-6">
         {/* Branding section in navbar */}
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <MaterialIcon icon={<LightbulbIcon />} filled className="text-[22px]" />
-          </div>
+          <img
+            src="/icon.ico"
+            alt="BYAAS logo"
+            className="h-15 w-15"
+            draggable={false}
+          />
           <div className="flex flex-col leading-none">
             <span className="text-base font-bold tracking-tight">Byaas</span>
             <span className="text-xs text-muted-foreground">
               Bot Template Studio
             </span>
           </div>
+
         </div>
         {/* Main navbar section */}
         <nav className="hidden items-center gap-1 rounded-full border border-border bg-card p-1 md:flex">

@@ -22,15 +22,15 @@ const socials: { id: string; goto: string; icon: JSX.Element }[] = [
 ];
 
 const Footer = () => {
-  const dateTime = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer
-      className="w-full border-t border-border bg-muted px-20 py-2.5 flex
+      className="bg-background/85 backdrop-blur-md w-full border-t border-border px-20 py-2.5 flex
     flex-col sm:flex-row justify-around items-center gap-2 text-xs"
     >
       <p className="text-muted-foreground text-center sm:text-left flex flex-wrap items-center gap-x-1">
-        &copy; {dateTime} All rights reserved.&nbsp;Developed with love by{" "}
+        &copy; {currentYear} All rights reserved.&nbsp;Developed with love by{" "}
         <a
           href="https://github.com/and3sil4"
           target="_blank"

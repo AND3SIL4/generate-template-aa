@@ -73,7 +73,7 @@ const TemplateHistory = () => {
             <p className="mt-1 text-sm text-muted-foreground">
               {history.length === 0
                 ? "Generated templates will appear here"
-                : "Try adjunting your search values"}
+                : "Try adjusting your search values"}
             </p>
           </CardContent>
         </Card>
