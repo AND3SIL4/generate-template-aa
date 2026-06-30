@@ -1,6 +1,14 @@
 import { customers, Phase } from "@/lib/template-generation";
 import { invoke } from "@tauri-apps/api/core";
-import { Download, Package, Plus, Sparkles, Trash2 } from "lucide-react";
+import {
+  Blocks,
+  CheckCircle2,
+  Download,
+  Package,
+  Plus,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "./ui/badge";
@@ -26,6 +34,8 @@ const TemplateGenerator = () => {
   const [projectName, setProjectName] = useState("");
   const [customer, setCustomer] = useState("");
   const [phases, setPhases] = useState<Phase[]>([]);
+  const [isAddingPhase, setIsAddinPhase] = useState(false);
+  const [phaseName, setPhaseName] = useState("");
 
   const isFormValid = projectName.trim() && customer.trim();
 
@@ -61,24 +71,27 @@ const TemplateGenerator = () => {
     setPhases([]);
   };
 
-  const addPhase = () => {
+  const addPhase = (phaseName: string) => {
+    phaseName = phaseName.trim();
+    if (!phaseName) return;
+
+    // Validate if the phase name already exists
+    if (
+      phases.some(
+        (p) => p.name.toLocaleLowerCase() === phaseName.toLocaleLowerCase(),
+      )
+    ) {
+      toast.error(`This phase '${phaseName}' already exists.`, {
+        description: "Phas name must be unique in the whole template",
+      });
+      return;
+    }
     const newPhase: Phase = {
       id: crypto.randomUUID(),
-      name: "",
+      name: phaseName,
     };
     setPhases([...phases, newPhase]);
-  };
-
-  const updatePhase = (id: string, field: keyof Phase, value: string) => {
-    setPhases(
-      phases.map((phase) =>
-        phase.id === id ? { ...phase, [field]: value } : phase,
-      ),
-    );
-  };
-
-  const removePhase = (id: string) => {
-    setPhases(phases.filter((phase) => phase.id !== id));
+    setIsAddinPhase(false);
   };
 
   return (
@@ -93,10 +106,10 @@ const TemplateGenerator = () => {
               v3.0
             </Badge>
           </div>
-          <h2 className="mt-3 text-2xl font-bold tracking-tight md:text-3xl">
+          <h2 className="mt-3 text-xl font-bold tracking-tight">
             Generate Best Practice Templates
           </h2>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
+          <p className="mt-2 text-sm max-w-2xl text-muted-foreground">
             Create production-ready{" "}
             <strong className="text-amber-600">Automation Anywhere</strong> bot
             templates with proper folder structure, error handling, and
@@ -185,7 +198,7 @@ const TemplateGenerator = () => {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={addPhase}
+                onClick={() => setIsAddinPhase(true)}
                 className="gap-2 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
               >
                 <Plus className="h-4 w-4" />
@@ -193,7 +206,73 @@ const TemplateGenerator = () => {
               </Button>
             </div>
 
-            {phases.length === 0 ? (
+            {/* List all phases to be added into the template generation */}
+            <div className="flex flex-col flex-wrap gap-2">
+              <span className="mt-1 text-xs text-muted-foreground/70">
+                ({phases.length}) Phases already added:{" "}
+              </span>
+              <div className="flex gap-2">
+                {phases.map((phase, idx) => (
+                  <span
+                    key={phase.id}
+                    className="inline-flex items-center rounded-md border text-muted-foreground/70 px-3 py-1 text-xs font-semibold"
+                  >
+                    <Blocks className="w-4 h-4 mr-1" />
+                    {phase.name || `Phase ${idx + 1}`}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {isAddingPhase ? (
+              <div className="space-y-3">
+                <div className="group relative rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-primary/30 hover:shadow-md">
+                  <div className="flex-1">
+                    <label
+                      htmlFor="add-phase"
+                      className="font-mono text-xs px-0.5"
+                    >
+                      Type Your Phase Name
+                    </label>
+                    <div className="flex justify-between items-center gap-3">
+                      <Input
+                        id="add-phase"
+                        placeholder="Avoid using blank spaces. Eg: Phase_Name_One"
+                        className="h-9"
+                        onChange={(e) => setPhaseName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addPhase(phaseName);
+                          }
+
+                          if (e.key == "Escape") {
+                            setIsAddinPhase(false);
+                          }
+                        }}
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsAddinPhase(false)}
+                        className="h-9 w-9 text-muted-foreground border hover:bg-destructive/10 hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => addPhase(phaseName)}
+                        className="h-9 gap-2 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground"
+                      >
+                        <CheckCircle2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
               <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border/50 bg-muted/30 p-8 text-center">
                 <Package className="h-10 w-10 text-muted-foreground/50" />
                 <p className="mt-3 text-sm font-medium text-muted-foreground">
@@ -203,45 +282,6 @@ const TemplateGenerator = () => {
                   Click &quot;Add Phase&quot; to include modules in your
                   template
                 </p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {phases.map((phase, index) => (
-                  <div
-                    key={phase.id}
-                    className="group relative rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-primary/30 hover:shadow-md"
-                  >
-                    <div className="flex-1 space-y-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <Badge variant="outline" className="font-mono text-xs">
-                          Phase {index + 1}
-                        </Badge>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removePhase(phase.id)}
-                          className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <div className="space-y-1.5">
-                          <Label className="text-xs">Phase Name</Label>
-                          <Input
-                            placeholder="e.g., Data Extraction"
-                            value={phase.name}
-                            onChange={(e) =>
-                              updatePhase(phase.id, "name", e.target.value)
-                            }
-                            className="h-9"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>
@@ -270,7 +310,6 @@ const TemplateGenerator = () => {
               onClick={handleGenerate}
               className="w-full gap-2 sm:w-auto"
             >
-              {" "}
               <Download className="h-4 w-4" /> Generate Template
             </Button>
           </div>
