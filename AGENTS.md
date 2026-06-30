@@ -1,81 +1,46 @@
 # AGENTS.md
 
-Essential guidelines for working on the BYAAS Tauri + React desktop app.
+## Port Mismatch (Known Issue)
+
+- `vite.config.ts` sets `port: 4321, strictPort: true`, but `tauri.conf.json` has `devUrl: http://localhost:1420`
+- `bun run tauri dev` runs `beforeDevCommand: "bun run dev"` (serves on 4321) then connects to 1420
+- Docs and comments claim port 1420; the actual Vite config disagrees
 
 ## Key Commands
 
-**Development:**
+- `bun run dev` — Vite dev server (port 4321 per config, despite docs claiming 1420)
+- `bun run tauri dev` — Full Tauri dev (frontend hot-reloads; Rust requires restart)
+- `bun run build` / `bun run tauri build` — Frontend only / desktop (NSIS, Windows only)
+- `bun run preview` — Preview production build
+- `bun run prettier` — Format frontend (no ESLint configured)
+- `cargo fmt` / `cargo clippy` — Format/lint Rust
+- `cargo test` — Runs all Rust tests (currently **zero tests in codebase**)
+- `bun install` / `bun add <pkg>` / `bun add -d <pkg>` — Frontend deps
 
-- `bun run tauri dev` - Full dev with hot reload (frontend only auto-reloads)
-- `bun run dev` - Frontend only (port 1420)
-- `bun run tauri dev --debug` - Verbose logging
+## Architecture
 
-**Production:**
+**Frontend (React 19 + TS):** `src/main.tsx` → `App.tsx` → `pages/home-page.tsx`. Components in `components/` (ui/, icons/, top-navbar, template-generator, template-history, etc.). Toast calls need unique IDs (see common patterns below).
 
-- `bun run build` - Build frontend
-- `bun run tauri build` - Build desktop app
-- `bun run preview` - Preview locally
+**Backend (Rust/Tauri 2):** `src-tauri/src/commands/` (Tauri commands using `Result<T, String>`), `domain/` (types/constants), `infra/` (filesystem, zip, JSON manifest, regex replacer), `services/` (scaffold generation, GitHub template downloads). To add a command: create file in `commands/`, export in `commands/mod.rs`, register in `lib.rs`.
 
-**Testing:**
+## Stubbed / Incomplete
 
-- `cargo test` - Run Rust backend tests
-- `cargo fmt` - Format Rust code
-- `cargo clippy` - Lint Rust code
+- `commands/tursor.rs` and `repositories/turso_repo.rs` — declared in `mod.rs` but **do not exist on disk**
+- `config/Config.toml` has empty Turso credentials; `config/config.rs` is empty
+- `components.json` uses `@images/*` aliases but Vite only defines `@` → `./src`; `@images` is **not** a working alias
+- No `src/assets/` directory exists despite README references
 
-**Package Management:**
+## Config Quirks
 
-- `bun install` - Install dependencies
-- `bun add <pkg>` - Add dependency
-- `bun add -d <pkg>` - Add dev dependency
-
-## Critical Details
-
-**Ports & Networking:**
-
-- Frontend dev server: **1420** (fixed, required by Tauri)
-- HMR port: **1421** (when using TAURI_DEV_HOST)
-- Vite ignores: `src-tauri/**` directory
-
-**File Watching:**
-
-- Frontend: Auto-reloads in `bun run tauri dev`
-- Backend: **Requires restart** after Rust changes (not auto-reloaded)
-
-**Asset Alias:**
-
-- `@images` → `src/assets/images`
-
-**Commit Convention:**
-
-- Use [better-commits](https://github.com/Everduin94/better-commits) conventions
-- See `.better-commits.json` for configuration
-
-**Auto-Updater:**
-
-- Configured via GitHub releases (see `src-tauri/tauri.conf.json`)
-- Endpoint: `https://github.com/AND3SIL4/byaas/releases/latest/download/latest.json`
-
-## Architecture Notes
-
-**Frontend (React):**
-
-- Functional components only
-- Component structure follows `components/` categories (ui, layout, forms, etc.)
-- State updates use functional form: `setState(prev => ({ ...prev, field: value }))`
-- Toast notifications require IDs to prevent duplicates
-
-**Backend (Rust/Tauri):**
-
-- Modular structure: commands, domain, infra, services
-- Commands use `Result<T, String>` with `?` operator for error handling
-- Domain types follow Serde patterns with Deserialize/Serialize
-- Add new commands: 1) Define in `commands/<module>.rs`, 2) Export in `commands/mod.rs`, 3) Register in `lib.rs`
+- `tauri.conf.json` has `"csp": null` (wide open; production should tighten)
+- Bundle targets: `["nsis"]` only (Windows); no macOS/Linux configured
+- Auto-updater configured via GitHub releases (see `tauri.conf.json` `plugins.updater`)
+- Commit convention: [better-commits](https://github.com/Everduin94/better-commits) (see `.better-commits.json`)
 
 ## Common Patterns
 
-**Tauri Command Invocation:**
-
 ```javascript
+// Toast invocation (ID required to prevent duplicates)
 const toastId = 'unique-id';
 toast.loading('Processing...', { id: toastId });
 try {
@@ -84,27 +49,8 @@ try {
 } catch (error) {
   toast.error(error, { id: toastId });
 }
+
+// State updates (functional form)
+setScaffoldData((prev) => ({ ...prev, phases: [...prev.phases, newPhase] }));
+setScaffoldData((prev) => ({ ...prev, phases: prev.phases.filter((_, i) => i !== index) }));
 ```
-
-**State Updates:**
-
-```javascript
-// Adding item
-setScaffoldData((prev) => ({
-  ...prev,
-  phases: [...prev.phases, newPhase],
-}));
-
-// Removing item
-setScaffoldData((prev) => ({
-  ...prev,
-  phases: prev.phases.filter((_, i) => i !== index),
-}));
-```
-
-## Important Constraints
-
-- Never expose secrets in frontend code
-- Validate all inputs in Rust commands before processing
-- Keep CSP strict for production builds
-- Use Tauri's capability system for permission management
