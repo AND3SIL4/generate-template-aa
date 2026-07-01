@@ -1,4 +1,4 @@
-use reqwest::blocking::Client;
+use reqwest::Client;
 use std::{
     fs::File,
     io::Write,
@@ -8,7 +8,10 @@ use std::{
 use crate::domain::constants::CURRENT_TEMPLATE_NAME;
 use crate::domain::constants::{GENERAL, KERALTY};
 
-pub fn download_current_template(download_path: &Path, customer: &str) -> Result<PathBuf, String> {
+pub async fn download_current_template(
+    download_path: &Path,
+    customer: &str,
+) -> Result<PathBuf, String> {
     let client = Client::new(); // Create the https client
     let url = match customer {
         "keralty" => KERALTY,
@@ -16,7 +19,7 @@ pub fn download_current_template(download_path: &Path, customer: &str) -> Result
     };
 
     // Get the response calling the url
-    let response = client.get(url).send().map_err(|e| e.to_string())?;
+    let response = client.get(url).send().await.map_err(|e| e.to_string())?;
     if !response.status().is_success() {
         return Err(format!("HTTP {}", response.status()));
     }
@@ -29,7 +32,7 @@ pub fn download_current_template(download_path: &Path, customer: &str) -> Result
     let mut file = File::create(&zip_path).map_err(|e| e.to_string())?;
 
     // Write the bytes to the created file
-    let bytes = response.bytes().map_err(|e| e.to_string())?;
+    let bytes = response.bytes().await.map_err(|e| e.to_string())?;
     file.write_all(&bytes).map_err(|e| e.to_string())?;
 
     Ok(zip_path) // Return the full path of the basic template
