@@ -8,15 +8,20 @@ pub struct ScaffoldResponse {
 }
 
 impl ScaffoldResponse {
-    pub fn success(path: &str, matches: &usize) -> Self {
+    pub fn success(path: &str, matches: &usize, id_template: &uuid::Uuid) -> Self {
         Self {
-            msg: "Template generated successfully".into(),
-            details: format!("Total matches: '{}'\n Final location: '{}'", matches, path),
+            msg: "Template generated successfully".to_string(),
+            details: format!(
+                "({}) Matches. Check the following folder: `{}`. Generation Id: {}",
+                matches,
+                path,
+                id_template.to_string()
+            ),
         }
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct ScaffoldData {
     pub name: String,
     pub phases: Vec<String>,
