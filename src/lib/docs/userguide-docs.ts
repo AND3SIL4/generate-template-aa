@@ -7,9 +7,9 @@ export const userGuideContent = [
     icon: Zap,
     sections: [
       {
-        title: "What is BYaaS?",
+        title: "What is BYAAS?",
         content:
-          "BYaaS (Bot-Your-as-a-Service) is a template generator for Automation Anywhere bots. It creates standardized folder structures and boilerplate code following best practices, saving you hours of setup time.",
+          "BYAAS (Build Your Template Scaffold) is a template generator for Automation Anywhere bots. It creates standardized folder structures and boilerplate code following best practices, saving you hours of setup time.",
       },
       {
         title: "Creating Your First Template",
@@ -31,17 +31,17 @@ export const userGuideContent = [
       {
         title: "Template Generation",
         content:
-          "Generate complete bot templates with proper folder structure, including subfolders for tasks, variables, error handling, and documentation.",
+          "Generate complete bot templates with proper folder structure, including subfolders for tasks, variables, error handling, and documentation. And finally update records in database which sotored a historical",
       },
       {
         title: "Phase Management",
         content:
-          "Add, remove, and reorder phases to match your workflow. Each phase creates a dedicated subfolder with appropriate boilerplate code.",
+          "Add, remove, and confirm phases to match your workflow. Each phase creates a dedicated subfolder with appropriate boilerplate code.",
       },
       {
         title: "Customer Profiles",
         content:
-          "Different customers may have different naming conventions or requirements. Select the appropriate customer to apply their specific configurations.",
+          "Different customers may have different naming conventions, specific tasks or requirements. Select the appropriate customer to apply their specific configurations.",
       },
     ],
   },
@@ -58,7 +58,7 @@ export const userGuideContent = [
       {
         title: "Post-Import Steps",
         content:
-          "After importing, review the generated structure and customize:\n- Update variable values for your environment\n- Configure credentials in the Credential Vault\n- Modify error handling as needed\n- Update logging paths",
+          "After importing, review the generated structure and customize:\n- Update variable values for your environment\n- Configure credentials in the Credential Vault\n- Modify error handling as needed\n- Update logging paths\n- Update packages before start working",
       },
     ],
   },

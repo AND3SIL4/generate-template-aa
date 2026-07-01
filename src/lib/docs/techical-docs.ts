@@ -9,25 +9,19 @@ export const technicalDocsContent = [
       {
         title: "Folder Structure",
         content: `ProjectName/
-├── Tasks/
-│   ├── Main.atmx
-│   ├── Initialize.atmx
-│   ├── Process.atmx
-│   └── Cleanup.atmx
-├── Variables/
-│   ├── Global.atmx
-│   └── Config.atmx
-├── ErrorHandler/
-│   └── ErrorHandler.atmx
-├── Logs/
-│   └── (generated at runtime)
-└── Documentation/
-    └── README.md`,
+|___ Phase/
+    ├── Main
+    ├── Funciones
+        |___ TaskPlantilla
+    ├── Parametros
+        |___ ConfigPlantilla
+    └── Historias
+        |___ TaskPlantilla`,
       },
       {
         title: "Naming Conventions",
         content:
-          "- Tasks: PascalCase (e.g., ProcessInvoice.atmx)\n- Variables: camelCase with prefix (e.g., strInputPath, intCounter)\n- Subfolders: PascalCase matching phase names\n- Error handlers: ErrorHandler_[PhaseName].atmx",
+          "- Tasks: PascalCase (e.g., ProcessInvoice.atmx)\n- Variables: camelCase with prefix (e.g., str_InputPath, int_Counter)\n- Subfolders: PascalCase matching phase names\n- Error handlers: ErrorHandler_[PhaseName].atmx",
       },
     ],
   },
@@ -39,7 +33,7 @@ export const technicalDocsContent = [
       {
         title: "Type Prefixes",
         content:
-          "- str: String variables\n- int: Number/Integer variables\n- bool: Boolean variables\n- dict: Dictionary variables\n- list: List variables\n- dt: DateTime variables\n- rec: Record variables\n- tbl: Table variables",
+          "- str: String variables\n- int: Number/Integer variables\n- bool: Boolean variables\n- dict: Dictionary variables\n- list: List variables\n- dte: DateTime variables\n- rec: Record variables\n- tbl: Table variables",
       },
       {
         title: "Scope Guidelines",
